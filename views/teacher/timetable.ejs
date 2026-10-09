@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Timetable | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/teacher-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">My Timetable</div>
+        </div>
+      </header>
+      <div class="page-content">
+        <div class="card">
+          <% if (!timetable.length) { %>
+            <p class="text-muted">No timetable entries assigned yet.</p>
+          <% } else {
+            var byDay = {};
+            timetable.forEach(function(t) {
+              var d = t.day_of_week;
+              if (!byDay[d]) byDay[d] = [];
+              byDay[d].push(t);
+            });
+            Object.keys(byDay).sort().forEach(function(d) { %>
+              <h3 style="font-size:1rem;margin:16px 0 8px;"><%= dayNames[d] || ('Day ' + d) %></h3>
+              <table class="table">
+                <thead><tr><th>Time</th><th>Subject</th><th>Class</th><th>Room</th></tr></thead>
+                <tbody>
+                  <% byDay[d].forEach(function(t) { %>
+                    <tr>
+                      <td><%= t.start_time %> – <%= t.end_time %></td>
+                      <td><%= t.subject_name %></td>
+                      <td><%= t.class_name %></td>
+                      <td><%= t.room || '—' %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+          <% }) } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

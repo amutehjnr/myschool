@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admissions | Precious Star Heritage Academy</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/public.css">
+</head>
+<body class="public-body">
+  <%- include('../partials/public-navbar') %>
+  <section class="section">
+    <h1 class="section-title">Online Admission Application</h1>
+    <p style="max-width:640px;margin:0 auto 24px;text-align:center;color:var(--color-text-muted);">
+      Complete the form below to begin your application. You will receive a reference number to track status.
+    </p>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="alert alert-danger" style="max-width:720px;margin:0 auto 16px;"><%= error %></div>
+    <% } %>
+
+    <div class="card" style="max-width:720px;margin:0 auto;">
+      <form method="POST" action="/admissions/apply" novalidate>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+        <h2 style="font-size:1.1rem;margin-bottom:12px;">Applicant details</h2>
+        <div class="flex gap-4" style="flex-wrap:wrap;">
+          <div class="form-group" style="flex:1;min-width:180px;">
+            <label class="form-label" for="first_name">First name *</label>
+            <input type="text" id="first_name" name="first_name" class="form-control" required
+                   value="<%= typeof form !== 'undefined' && form.first_name ? form.first_name : '' %>">
+          </div>
+          <div class="form-group" style="flex:1;min-width:180px;">
+            <label class="form-label" for="last_name">Last name *</label>
+            <input type="text" id="last_name" name="last_name" class="form-control" required
+                   value="<%= typeof form !== 'undefined' && form.last_name ? form.last_name : '' %>">
+          </div>
+          <div class="form-group" style="flex:1;min-width:140px;">
+            <label class="form-label" for="middle_name">Middle name</label>
+            <input type="text" id="middle_name" name="middle_name" class="form-control"
+                   value="<%= typeof form !== 'undefined' && form.middle_name ? form.middle_name : '' %>">
+          </div>
+        </div>
+        <div class="flex gap-4" style="flex-wrap:wrap;">
+          <div class="form-group" style="flex:1;min-width:140px;">
+            <label class="form-label" for="date_of_birth">Date of birth</label>
+            <input type="date" id="date_of_birth" name="date_of_birth" class="form-control"
+                   value="<%= typeof form !== 'undefined' && form.date_of_birth ? form.date_of_birth : '' %>">
+          </div>
+          <div class="form-group" style="flex:1;min-width:120px;">
+            <label class="form-label" for="gender">Gender</label>
+            <select id="gender" name="gender" class="form-control">
+              <option value="">—</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex:1;min-width:140px;">
+            <label class="form-label" for="applying_for_class">Applying for class</label>
+            <select id="applying_for_class" name="applying_for_class" class="form-control">
+              <option value="">—</option>
+              <% classes.forEach(function(c) { %>
+                <option value="<%= c.name %>"><%= c.name %></option>
+              <% }) %>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="academic_session_id">Academic session</label>
+          <select id="academic_session_id" name="academic_session_id" class="form-control">
+            <% sessions.forEach(function(s) { %>
+              <option value="<%= s.id %>" <%= s.is_current ? 'selected' : '' %>><%= s.name %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="previous_school">Previous school</label>
+          <input type="text" id="previous_school" name="previous_school" class="form-control">
+        </div>
+
+        <h2 style="font-size:1.1rem;margin:20px 0 12px;">Parent / Guardian</h2>
+        <div class="flex gap-4" style="flex-wrap:wrap;">
+          <div class="form-group" style="flex:1;min-width:180px;">
+            <label class="form-label" for="parent_first_name">First name</label>
+            <input type="text" id="parent_first_name" name="parent_first_name" class="form-control">
+          </div>
+          <div class="form-group" style="flex:1;min-width:180px;">
+            <label class="form-label" for="parent_last_name">Last name</label>
+            <input type="text" id="parent_last_name" name="parent_last_name" class="form-control">
+          </div>
+        </div>
+        <div class="flex gap-4" style="flex-wrap:wrap;">
+          <div class="form-group" style="flex:1;min-width:180px;">
+            <label class="form-label" for="parent_email">Email</label>
+            <input type="email" id="parent_email" name="parent_email" class="form-control">
+          </div>
+          <div class="form-group" style="flex:1;min-width:140px;">
+            <label class="form-label" for="parent_phone">Phone</label>
+            <input type="text" id="parent_phone" name="parent_phone" class="form-control">
+          </div>
+          <div class="form-group" style="flex:1;min-width:120px;">
+            <label class="form-label" for="parent_relationship">Relationship</label>
+            <input type="text" id="parent_relationship" name="parent_relationship" class="form-control" placeholder="Father / Mother / Guardian">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="address">Address</label>
+          <textarea id="address" name="address" class="form-control" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="notes">Additional notes</label>
+          <textarea id="notes" name="notes" class="form-control" rows="2"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Continue to documents</button>
+        <a href="/admissions/status" class="btn btn-outline" style="margin-left:8px;">Track existing application</a>
+      </form>
+    </div>
+  </section>
+  <%- include('../partials/public-footer') %>
+</body>
+</html>

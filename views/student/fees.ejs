@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Fees | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/student-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">My Fees</div>
+        </div>
+      </header>
+      <div class="page-content">
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr><th>Fee</th><th>Amount due</th><th>Paid</th><th>Balance</th><th>Status</th></tr>
+              </thead>
+              <tbody>
+                <% if (!fees || !fees.length) { %>
+                  <tr><td colspan="5" class="text-center text-muted">No fee bills.</td></tr>
+                <% } else { fees.forEach(function(f) {
+                  var bal = Number(f.amount_due) - Number(f.amount_paid);
+                %>
+                  <tr>
+                    <td><%= f.fee_name %></td>
+                    <td>₦<%= Number(f.amount_due).toLocaleString() %></td>
+                    <td>₦<%= Number(f.amount_paid).toLocaleString() %></td>
+                    <td>₦<%= bal.toLocaleString() %></td>
+                    <td><span class="badge <%= statusBadgeClass(f.status) %>"><%= f.status %></span></td>
+                  </tr>
+                <% }) } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

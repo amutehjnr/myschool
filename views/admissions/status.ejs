@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Application | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/public.css">
+</head>
+<body class="public-body">
+  <%- include('../partials/public-navbar') %>
+  <section class="section">
+    <h1 class="section-title">Track application</h1>
+    <div class="card" style="max-width:480px;margin:0 auto 24px;">
+      <form method="POST" action="/admissions/status">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="form-group">
+          <label class="form-label" for="reference">Reference number</label>
+          <input type="text" id="reference" name="reference" class="form-control" required
+                 placeholder="PSHA-ADM-2026-123456" value="<%= reference || '' %>">
+        </div>
+        <button type="submit" class="btn btn-primary">Check status</button>
+      </form>
+    </div>
+
+    <% if (notFound) { %>
+      <div class="alert alert-warning" style="max-width:480px;margin:0 auto;">No application found with that reference number.</div>
+    <% } %>
+
+    <% if (application) { %>
+      <div class="card" style="max-width:560px;margin:0 auto;">
+        <p><strong>Reference:</strong> <%= application.reference_number %></p>
+        <p class="mt-2"><strong>Applicant:</strong> <%= application.applicant_first_name %> <%= application.applicant_last_name %></p>
+        <p class="mt-2"><strong>Status:</strong> <span class="badge <%= statusBadgeClass(application.status) %>"><%= application.status %></span></p>
+        <% if (application.submitted_at) { %>
+          <p class="mt-2"><strong>Submitted:</strong> <%= formatDate(application.submitted_at) %></p>
+        <% } %>
+        <% if (application.status === 'additional_info_required' && application.admin_notes) { %>
+          <div class="alert alert-info mt-4"><strong>School message:</strong> <%= application.admin_notes %></div>
+        <% } %>
+        <% if (application.status === 'approved') { %>
+          <div class="alert alert-success mt-4">Congratulations! Your application has been approved. The school will contact you with next steps.</div>
+        <% } %>
+        <% if (application.status === 'rejected') { %>
+          <div class="alert alert-danger mt-4">We regret that this application was not successful. Please contact the school for more information.</div>
+        <% } %>
+      </div>
+    <% } %>
+  </section>
+  <%- include('../partials/public-footer') %>
+</body>
+</html>

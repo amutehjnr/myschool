@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assessments | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/teacher-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Assessments</div>
+        </div>
+        <a href="/teacher/assessments/new" class="btn btn-primary btn-sm">New assessment</a>
+      </header>
+      <div class="page-content">
+        <% if (typeof flash !== 'undefined' && flash) { %>
+          <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" data-auto-dismiss><%= flash.message %></div>
+        <% } %>
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr><th>Name</th><th>Type</th><th>Class</th><th>Subject</th><th>Max</th><th>Status</th><th></th></tr>
+              </thead>
+              <tbody>
+                <% if (!assessments.length) { %>
+                  <tr><td colspan="7" class="text-center text-muted">No assessments yet.</td></tr>
+                <% } %>
+                <% assessments.forEach(function(a) { %>
+                  <tr>
+                    <td><%= a.name %></td>
+                    <td><span class="badge badge-info"><%= a.assessment_type %></span></td>
+                    <td><%= a.class_name %></td>
+                    <td><%= a.subject_name %></td>
+                    <td><%= a.max_score %></td>
+                    <td><span class="badge <%= a.is_published ? 'badge-success' : 'badge-secondary' %>"><%= a.is_published ? 'Published' : 'Open' %></span></td>
+                    <td><a href="/teacher/assessments/<%= a.id %>/scores" class="btn btn-outline btn-sm">Scores</a></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

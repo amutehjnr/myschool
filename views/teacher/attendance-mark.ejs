@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mark Class Attendance | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/teacher-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Mark class attendance</div>
+        </div>
+        <a href="/teacher/attendance" class="btn btn-outline btn-sm">My attendance</a>
+      </header>
+      <div class="page-content">
+        <% if (typeof flash !== 'undefined' && flash) { %>
+          <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" data-auto-dismiss><%= flash.message %></div>
+        <% } %>
+        <div class="card mb-4">
+          <form method="GET" action="/teacher/attendance/mark" class="flex gap-2" style="flex-wrap:wrap;align-items:flex-end;">
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Class</label>
+              <select name="class_id" class="form-control" required>
+                <option value="">—</option>
+                <% classes.forEach(function(c) { %>
+                  <option value="<%= c.id %>" <%= String(classId)===String(c.id)?'selected':'' %>><%= c.name %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Date</label>
+              <input type="date" name="date" class="form-control" value="<%= date %>">
+            </div>
+            <button type="submit" class="btn btn-outline btn-sm">Load</button>
+          </form>
+        </div>
+        <% if (classId && sheet.length) { %>
+          <div class="card">
+            <form method="POST" action="/teacher/attendance/mark">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <input type="hidden" name="class_id" value="<%= classId %>">
+              <input type="hidden" name="date" value="<%= date %>">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr><th>Student ID</th><th>Name</th><th>Status</th></tr>
+                  </thead>
+                  <tbody>
+                    <% sheet.forEach(function(s) { %>
+                      <tr>
+                        <td><%= s.studentCode %>
+                          <input type="hidden" name="student_id" value="<%= s.studentId %>">
+                        </td>
+                        <td><%= s.lastName %> <%= s.firstName %></td>
+                        <td>
+                          <select name="status" class="form-control" style="width:auto;">
+                            <% ['present','absent','late','excused'].forEach(function(st) { %>
+                              <option value="<%= st %>" <%= s.status===st?'selected':'' %>><%= st %></option>
+                            <% }) %>
+                          </select>
+                        </td>
+                      </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+              <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Save attendance</button>
+              </div>
+            </form>
+          </div>
+        <% } else if (classId) { %>
+          <div class="card"><p class="text-muted">No students in this class.</p></div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

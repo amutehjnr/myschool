@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Children | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/parent-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">My Children</div>
+        </div>
+        <a href="/parent/children/link" class="btn btn-primary btn-sm">Link a child</a>
+      </header>
+      <div class="page-content">
+        <% if (typeof flash !== 'undefined' && flash) { %>
+          <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" data-auto-dismiss><%= flash.message %></div>
+        <% } %>
+        <div class="stats-grid">
+          <% if (!children.length) { %>
+            <div class="card">
+              <p class="text-muted mb-4">No children linked yet.</p>
+              <a href="/parent/children/link" class="btn btn-primary btn-sm">Link a child</a>
+            </div>
+          <% } else { children.forEach(function(c) { %>
+            <a href="/parent/children/<%= c.id %>" class="stat-card" style="text-decoration:none;color:inherit;">
+              <div class="label"><%= c.student_id %></div>
+              <div class="value" style="font-size:1.15rem;"><%= c.first_name %> <%= c.last_name %></div>
+              <div class="context"><%= c.class_name || '—' %> · <span class="badge <%= statusBadgeClass(c.status) %>"><%= c.status %></span></div>
+            </a>
+          <% }) } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

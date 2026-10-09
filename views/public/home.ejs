@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Precious Star Heritage Academy — Excellence in Education, Character and Leadership">
+  <title>Home | Precious Star Heritage Academy</title>
+  <link rel="stylesheet" href="/css/public.css">
+</head>
+<body class="public-body">
+
+  <!-- Navbar -->
+  <nav class="public-navbar">
+    <a href="/" class="brand">
+      <span class="mark">PS</span>
+      <span>My School Academy</span>
+    </a>
+    <button class="public-nav-toggle" aria-label="Menu">☰</button>
+    <ul class="public-nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/admissions">Admissions</a></li>
+      <li><a href="/gallery">Gallery</a></li>
+      <li><a href="/contact">Contact</a></li>
+      <li><a href="/login">Portal</a></li>
+    </ul>
+  </nav>
+
+  <!-- ============ HERO CAROUSEL (uses <img> tags) ============ -->
+  <section class="hero-carousel" id="heroCarousel" aria-roledescription="carousel" aria-label="School highlights">
+    <!-- Slide 1 -->
+    <div class="hero-slide is-active" data-index="0">
+      <img class="hero-bg"
+           src="/images/hero-1.jpeg"
+           alt="Students on campus at My School Academy"
+           loading="eager"
+           fetchpriority="high">
+      <div class="hero-inner">
+        <div class="hero-eyebrow">Academic session open · Lagos</div>
+        <h1>Where Curious Minds<br>Become <em>Exceptional Leaders</em></h1>
+        <p class="lead">
+          A rigorous, values-driven education that prepares students for academic success,
+          character and life leadership.
+        </p>
+        <div class="hero-ctas">
+          <a href="/admissions/apply" class="btn-gold">Begin application</a>
+          <a href="/about" class="btn-ghost-light">Discover PSHA</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="hero-slide" data-index="1">
+      <img class="hero-bg"
+           src="/images/hero-2.jpeg"
+           alt="Modern classroom learning environment"
+           loading="lazy">
+      <div class="hero-inner">
+        <div class="hero-eyebrow">Learning environment</div>
+        <h1>A Place to <em>Learn, Grow</em><br>&amp; Belong</h1>
+        <p class="lead">
+          Modern classrooms, dedicated teachers and a community that knows every child by name.
+        </p>
+        <div class="hero-ctas">
+          <a href="/gallery" class="btn-gold">View gallery</a>
+          <a href="/admissions" class="btn-ghost-light">Admissions info</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="hero-slide" data-index="2">
+      <img class="hero-bg"
+           src="/images/hero-3.jpeg"
+           alt="Students collaborating together"
+           loading="lazy">
+      <div class="hero-inner">
+        <div class="hero-eyebrow">Join our community</div>
+        <h1>Start Your Child’s<br><em>PSHA Journey</em></h1>
+        <p class="lead">
+          Applications are open. Apply online in minutes or speak with our admissions team.
+        </p>
+        <div class="hero-ctas">
+          <a href="/admissions/apply" class="btn-gold">Apply now</a>
+          <a href="/contact" class="btn-ghost-light">Contact us</a>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="hero-nav prev" aria-label="Previous slide">‹</button>
+    <button type="button" class="hero-nav next" aria-label="Next slide">›</button>
+
+    <div class="hero-footer-bar">
+      <div class="hero-dots" role="tablist" aria-label="Slide controls">
+        <button type="button" class="is-active" aria-label="Slide 1" data-go="0"></button>
+        <button type="button" aria-label="Slide 2" data-go="1"></button>
+        <button type="button" aria-label="Slide 3" data-go="2"></button>
+      </div>
+      <div class="hero-progress" aria-hidden="true"><span id="heroProgress"></span></div>
+      <div class="hero-counter"><strong id="heroIndex">01</strong> / 03</div>
+    </div>
+  </section>
+
+  <!-- Stats strip -->
+  <div class="stats-strip">
+    <div class="stat"><div class="num">Excellence</div><div class="lbl">Academic focus</div></div>
+    <div class="stat"><div class="num">Character</div><div class="lbl">Values first</div></div>
+    <div class="stat"><div class="num">Safe</div><div class="lbl">Caring community</div></div>
+    <div class="stat"><div class="num">Portal</div><div class="lbl">Parents &amp; staff online</div></div>
+  </div>
+
+  <!-- ============ CAMPUS GALLERY ============ -->
+  <section class="section section-alt">
+    <div class="section-eyebrow">Campus life in pictures</div>
+    <h2 class="section-title">A glimpse into PSHA</h2>
+    <p class="section-lead">
+      Bright classrooms, collaborative spaces, vibrant activities — see where learning comes alive.
+    </p>
+
+    <div class="campus-gallery">
+      <div class="g-item wide">
+        <img src="/images/campus-1.jpeg" alt="Main campus building" loading="lazy">
+        <div class="g-caption">
+          <div class="g-tag">Main campus</div>
+          <h4>Our iconic academic building</h4>
+        </div>
+      </div>
+      <div class="g-item tall">
+        <img src="/images/campus-2.jpeg" alt="Science laboratory" loading="lazy">
+        <div class="g-caption">
+          <div class="g-tag">STEM</div>
+          <h4>Modern science labs</h4>
+        </div>
+      </div>
+      <div class="g-item">
+        <img src="/images/campus-3.jpeg" alt="Library" loading="lazy">
+        <div class="g-caption">
+          <div class="g-tag">Library</div>
+          <h4>Quiet reading spaces</h4>
+        </div>
+      </div>
+      <div class="g-item">
+        <img src="/images/campus-4.jpeg" alt="Sports day" loading="lazy">
+        <div class="g-caption">
+          <div class="g-tag">Athletics</div>
+          <h4>Sports &amp; recreation</h4>
+        </div>
+      </div>
+      <div class="g-item">
+        <img src="/images/campus-5.jpeg" alt="Classroom" loading="lazy">
+        <div class="g-caption">
+          <div class="g-tag">Classroom</div>
+          <h4>Interactive learning</h4>
+        </div>
+      </div>
+      <div class="g-item">
+        <img src="/images/campus-6.jpeg" alt="Arts and culture" loading="lazy">
+        <div class="g-caption">
+          <div class="g-tag">Arts</div>
+          <h4>Creative expression</h4>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SPLIT FEATURE #1 ============ -->
+  <section class="split-feature">
+    <div class="split-media">
+      <span class="media-badge">Student life</span>
+      <img src="/images/hero-2.jpeg" alt="Students collaborating" loading="lazy">
+    </div>
+    <div class="split-content">
+      <div class="s-eyebrow">Learning by doing</div>
+      <h2>Where every child is <em>known</em> and challenged</h2>
+      <p>
+        Our classrooms are active, collaborative spaces. Teachers mentor small groups,
+        encourage questions, and design lessons that connect ideas to real life.
+      </p>
+      <ul class="split-list">
+        <li>Small class sizes with personal attention</li>
+        <li>Project-based learning across year groups</li>
+        <li>Dedicated pastoral care and mentoring</li>
+        <li>Regular parent–teacher collaboration</li>
+      </ul>
+      <a href="/about" class="btn-outline-primary">Learn more about our approach</a>
+    </div>
+  </section>
+
+  <!-- ============ DISCOVER ============ -->
+  <section class="section">
+    <div class="section-eyebrow">Discover PSHA</div>
+    <h2 class="section-title">Explore. Learn. Belong. Succeed.</h2>
+    <p class="section-lead">Programmes, admissions and school life — everything you need to start your journey with us.</p>
+    <div class="discover-grid">
+      <a href="/admissions" class="discover-card">
+        <div class="num">01</div><h3>Admissions</h3>
+        <p>Begin your PSHA journey. Explore requirements, the application process and how to enrol.</p>
+        <span class="link">Apply now →</span>
+      </a>
+      <a href="/about" class="discover-card">
+        <div class="num">02</div><h3>Our school</h3>
+        <p>Mission, vision and the values that shape every classroom and relationship at PSHA.</p>
+        <span class="link">About us →</span>
+      </a>
+      <a href="/gallery" class="discover-card">
+        <div class="num">03</div><h3>Student life</h3>
+        <p>Learning beyond the classroom — culture, sport, leadership and community.</p>
+        <span class="link">View gallery →</span>
+      </a>
+      <a href="/contact" class="discover-card">
+        <div class="num">04</div><h3>Visit &amp; contact</h3>
+        <p>Speak with admissions, schedule a visit or send us a message.</p>
+        <span class="link">Contact us →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ SPLIT FEATURE #2 (reversed) ============ -->
+  <section style="background:#f8fafc; padding: 1rem 0;">
+    <div class="split-feature reverse">
+      <div class="split-media">
+        <span class="media-badge">Facilities</span>
+        <img src="/images/campus-1.jpeg" alt="Modern school facilities" loading="lazy">
+      </div>
+      <div class="split-content">
+        <div class="s-eyebrow">Built for curiosity</div>
+        <h2>Facilities that <em>inspire</em> learning</h2>
+        <p>
+          From fully equipped science laboratories to a well-stocked library and dedicated
+          arts spaces, our campus is designed to support every dimension of a child's growth.
+        </p>
+        <ul class="split-list">
+          <li>Modern science &amp; computer labs</li>
+          <li>Library and research resource centre</li>
+          <li>Sports field and multi-purpose hall</li>
+          <li>Safe, secure and green campus</li>
+        </ul>
+        <a href="/gallery" class="btn-outline-primary">Explore the campus</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHY PSHA ============ -->
+  <section class="section section-alt">
+    <div class="section-eyebrow">Why PSHA?</div>
+    <h2 class="section-title">More than a school. A foundation for the future.</h2>
+    <p class="section-lead">
+      We develop confident, capable young people through strong academics, character formation and a supportive community.
+    </p>
+    <div class="feature-grid">
+      <div class="feature-card"><div class="icon">01</div><h3>Academic excellence</h3><p>A rigorous curriculum designed to challenge every learner and build lasting foundations.</p></div>
+      <div class="feature-card"><div class="icon">02</div><h3>Dedicated teachers</h3><p>Experienced educators committed to the growth, safety and success of every student.</p></div>
+      <div class="feature-card"><div class="icon">03</div><h3>Character &amp; leadership</h3><p>Integrity, service and responsibility woven into daily school life.</p></div>
+      <div class="feature-card"><div class="icon">04</div><h3>Modern facilities</h3><p>Classrooms, labs and spaces that support active, practical learning.</p></div>
+      <div class="feature-card"><div class="icon">05</div><h3>Parent partnership</h3><p>Online portal for attendance, results, fees and school communication.</p></div>
+      <div class="feature-card"><div class="icon">06</div><h3>Safe environment</h3><p>A caring community where every child is known, challenged and supported.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ PROGRAMMES WITH IMAGES ============ -->
+  <section class="section">
+    <div class="section-eyebrow">Academic programmes</div>
+    <h2 class="section-title">A pathway for every stage of learning</h2>
+    <p class="section-lead">
+      From foundational years through secondary, our programmes balance depth, breadth and personal growth.
+    </p>
+    <div class="programme-grid">
+      <div class="programme-card">
+        <div class="card-media">
+          <span class="card-tag">Early years</span>
+          <img src="/images/early-years.jpeg" alt="Early years learning" loading="lazy">
+        </div>
+        <div class="card-body">
+          <h3>Foundation</h3>
+          <p>Play-based learning, language, numeracy and social development in a nurturing setting.</p>
+          <a href="/programmes/foundation" class="card-link">Learn more →</a>
+        </div>
+      </div>
+      <div class="programme-card">
+        <div class="card-media">
+          <span class="card-tag">Primary</span>
+          <img src="/images/primary-school.jpeg" alt="Primary school" loading="lazy">
+        </div>
+        <div class="card-body">
+          <h3>Primary school</h3>
+          <p>Strong literacy and numeracy, science, values education and creative expression.</p>
+          <a href="/programmes/primary" class="card-link">Learn more →</a>
+        </div>
+      </div>
+      <div class="programme-card">
+        <div class="card-media">
+          <span class="card-tag">Junior secondary</span>
+          <img src="/images/junior-secondary.jpeg" alt="Junior secondary" loading="lazy">
+        </div>
+        <div class="card-body">
+          <h3>JSS</h3>
+          <p>Broad curriculum preparing students for senior secondary pathways and exams.</p>
+          <a href="/programmes/jss" class="card-link">Learn more →</a>
+        </div>
+      </div>
+      <div class="programme-card">
+        <div class="card-media">
+          <span class="card-tag">Senior secondary</span>
+          <img src="/images/senior-secondary.jpeg" alt="Senior secondary" loading="lazy">
+        </div>
+        <div class="card-body">
+          <h3>SSS</h3>
+          <p>Focused preparation for external examinations, leadership and next-step careers.</p>
+          <a href="/programmes/sss" class="card-link">Learn more →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EVENTS ============ -->
+  <section class="section section-alt">
+    <div class="section-eyebrow">School calendar</div>
+    <h2 class="section-title">Upcoming events</h2>
+    <p class="section-lead">Stay connected with school life.</p>
+    <ul class="event-list">
+      <li>
+        <div class="event-date-badge">Sep<br>12</div>
+        <div>
+          <strong>Open Day &amp; Campus Tour</strong>
+          <div class="text-muted" style="font-size:0.85rem;margin-top:2px;">Main campus · 10:00 AM</div>
+        </div>
+      </li>
+      <li>
+        <div class="event-date-badge">Oct<br>05</div>
+        <div>
+          <strong>Parent–Teacher Conference</strong>
+          <div class="text-muted" style="font-size:0.85rem;margin-top:2px;">Assembly hall · 9:00 AM</div>
+        </div>
+      </li>
+      <li>
+        <div class="event-date-badge">Nov<br>18</div>
+        <div>
+          <strong>Inter-house Sports Festival</strong>
+          <div class="text-muted" style="font-size:0.85rem;margin-top:2px;">Sports field · 8:30 AM</div>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="cta-band">
+    <h2>Ready to join Precious Star Heritage Academy?</h2>
+    <p>Start your online application or speak with our admissions team today.</p>
+    <div class="hero-ctas">
+      <a href="/admissions/apply" class="btn-gold">Start application</a>
+      <a href="/contact" class="btn-ghost-light">Contact admissions</a>
+      <a href="/admissions/status" class="btn-ghost-light">Track application</a>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="public-footer">
+    <div class="public-footer-inner">
+      <div>
+        <h4>PSHA</h4>
+        <p style="font-size:0.875rem;opacity:0.8;">Excellence in education, character and leadership.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="/about">About</a>
+        <a href="/admissions">Admissions</a>
+        <a href="/gallery">Gallery</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a href="/contact">Contact us</a>
+        <a href="/admissions/status">Track application</a>
+      </div>
+      <div>
+        <h4>Portal</h4>
+        <a href="/login">Parent login</a>
+        <a href="/staff">Staff login</a>
+      </div>
+    </div>
+    <div class="public-footer-bottom">
+      &copy; <span id="year"></span> Precious Star Heritage Academy. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- ============ SCRIPTS ============ -->
+  <script>
+    // ---- Hero Carousel ----
+    (function () {
+      var root = document.getElementById('heroCarousel');
+      if (!root) return;
+      var slides = Array.prototype.slice.call(root.querySelectorAll('.hero-slide'));
+      var dots = Array.prototype.slice.call(root.querySelectorAll('.hero-dots button'));
+      var progress = document.getElementById('heroProgress');
+      var indexEl = document.getElementById('heroIndex');
+      var i = 0, timer = null, progressTimer = null;
+      var INTERVAL = 2000, started = 0;
+
+      function pad(n) { return n < 10 ? '0' + n : String(n); }
+
+      function go(n) {
+        i = (n + slides.length) % slides.length;
+        slides.forEach(function (s, idx) { s.classList.toggle('is-active', idx === i); });
+        dots.forEach(function (d, idx) { d.classList.toggle('is-active', idx === i); });
+        if (indexEl) indexEl.textContent = pad(i + 1);
+        restartProgress();
+      }
+      function next() { go(i + 1); }
+      function prev() { go(i - 1); }
+
+      function restartProgress() {
+        if (progressTimer) cancelAnimationFrame(progressTimer);
+        if (progress) progress.style.width = '0%';
+        started = performance.now();
+        function tick(now) {
+          var p = Math.min(1, (now - started) / INTERVAL);
+          if (progress) progress.style.width = (p * 100) + '%';
+          if (p < 1) progressTimer = requestAnimationFrame(tick);
+        }
+        progressTimer = requestAnimationFrame(tick);
+        if (timer) clearInterval(timer);
+        timer = setInterval(next, INTERVAL);
+      }
+
+      root.querySelector('.hero-nav.next').addEventListener('click', next);
+      root.querySelector('.hero-nav.prev').addEventListener('click', prev);
+      dots.forEach(function (d) {
+        d.addEventListener('click', function () { go(Number(d.getAttribute('data-go'))); });
+      });
+
+      root.addEventListener('mouseenter', function () {
+        if (timer) clearInterval(timer);
+        if (progressTimer) cancelAnimationFrame(progressTimer);
+      });
+      root.addEventListener('mouseleave', restartProgress);
+
+      // Pause when tab hidden (saves CPU)
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) {
+          if (timer) clearInterval(timer);
+          if (progressTimer) cancelAnimationFrame(progressTimer);
+        } else {
+          restartProgress();
+        }
+      });
+
+      restartProgress();
+    })();
+
+    // ---- Mobile nav toggle ----
+    (function () {
+      var toggle = document.querySelector('.public-nav-toggle');
+      var links = document.querySelector('.public-nav-links');
+      if (toggle && links) {
+        toggle.addEventListener('click', function () {
+          links.classList.toggle('open');
+        });
+      }
+    })();
+
+    // ---- Footer year ----
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

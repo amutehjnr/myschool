@@ -1,0 +1,27 @@
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="mark">PS</div>
+    <div>
+      <div class="name">PSHA</div>
+      <div class="descriptor">Admin Portal</div>
+    </div>
+  </div>
+  <ul class="sidebar-nav">
+    <li><a href="/admin/dashboard" class="<%= typeof path !== 'undefined' && path.indexOf('/admin/dashboard') === 0 ? 'active' : '' %>">Dashboard</a></li>
+    <li><a href="/admin/users" class="<%= typeof path !== 'undefined' && path.indexOf('/admin/users') === 0 ? 'active' : '' %>">Users</a></li>
+    <li><a href="/admin/roles" class="<%= typeof path !== 'undefined' && path.indexOf('/admin/roles') === 0 ? 'active' : '' %>">Roles</a></li>
+    <li><a href="/admin/teachers" class="<%= typeof path !== 'undefined' && path.indexOf('/admin/teachers') === 0 ? 'active' : '' %>">Teachers</a></li>
+    <li><a href="/admin/students" class="<%= typeof path !== 'undefined' && path.indexOf('/admin/students') === 0 ? 'active' : '' %>">Students</a></li>
+    <li><a href="/admin/admissions" class="<%= typeof path !== 'undefined' && path.indexOf('/admin/admissions') === 0 ? 'active' : '' %>">Admissions</a></li>
+    <li><a href="/admin/attendance/teachers" class="<%= typeof path !== 'undefined' && path.indexOf('/admin/attendance') === 0 ? 'active' : '' %>">Attendance</a></li>
+    <li><a href="/admin/results" class="<%= typeof path !== 'undefined' && path.indexOf('/admin/results') === 0 ? 'active' : '' %>">Results</a></li>
+    <li><a href="/admin/fees" class="<%= typeof path !== 'undefined' && path.indexOf('/admin/fees') === 0 ? 'active' : '' %>">Fees</a></li>
+    <li><a href="/admin/announcements" class="<%= typeof path !== 'undefined' && path.indexOf('/admin/announcements') === 0 ? 'active' : '' %>">Announcements</a></li>
+    <li><a href="/admin/events" class="<%= typeof path !== 'undefined' && path.indexOf('/admin/events') === 0 ? 'active' : '' %>">Events</a></li>
+    <li><a href="/admin/audit" class="<%= typeof path !== 'undefined' && path.indexOf('/admin/audit') === 0 ? 'active' : '' %>">Audit Log</a></li>
+    <li><a href="/admin/security" class="<%= typeof path !== 'undefined' && path.indexOf('/admin/security') === 0 ? 'active' : '' %>">Security</a></li>
+  </ul>
+  <div class="sidebar-footer">
+    <a href="/auth/logout">Log out</a>
+  </div>
+</aside>

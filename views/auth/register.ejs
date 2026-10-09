@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account | PSHA Portal</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body class="auth-body">
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="school-mark">PS</div>
+        <div>
+          <div class="school-name">Precious Star Heritage Academy</div>
+          <div class="school-descriptor">Parent registration</div>
+        </div>
+      </div>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-danger" role="alert"><%= error %></div>
+      <% } %>
+
+      <h1 class="auth-title">Create an account</h1>
+      <p class="auth-subtitle">Register as a parent/guardian to access the portal. Staff and student accounts are created by the school.</p>
+
+      <form method="POST" action="/auth/register" novalidate>
+        <input type="hidden" name="_csrf" value="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>">
+
+        <div class="form-group">
+          <label class="form-label" for="first_name">First name</label>
+          <input type="text" id="first_name" name="first_name" class="form-control" required autocomplete="given-name"
+                 value="<%= form && form.first_name ? form.first_name : '' %>">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="last_name">Last name</label>
+          <input type="text" id="last_name" name="last_name" class="form-control" required autocomplete="family-name"
+                 value="<%= form && form.last_name ? form.last_name : '' %>">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Email address</label>
+          <input type="email" id="email" name="email" class="form-control" required autocomplete="email"
+                 value="<%= form && form.email ? form.email : '' %>">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="phone">Phone (optional)</label>
+          <input type="text" id="phone" name="phone" class="form-control" autocomplete="tel"
+                 value="<%= form && form.phone ? form.phone : '' %>">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="relationship">Relationship to student (optional)</label>
+          <input type="text" id="relationship" name="relationship" class="form-control"
+                 placeholder="Father / Mother / Guardian"
+                 value="<%= form && form.relationship ? form.relationship : '' %>">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-control" required
+                 autocomplete="new-password" minlength="8"
+                 placeholder="Min. 8 chars, upper, lower, number">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password_confirm">Confirm password</label>
+          <input type="password" id="password_confirm" name="password_confirm" class="form-control" required
+                 autocomplete="new-password">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Create account</button>
+      </form>
+
+      <div class="auth-links">
+        <a href="/auth/login">Already have an account? Sign in</a>
+      </div>
+    </div>
+    <p class="auth-footer">&copy; <%= typeof currentYear !== 'undefined' ? currentYear : new Date().getFullYear() %> Precious Star Heritage Academy</p>
+  </div>
+</body>
+</html>

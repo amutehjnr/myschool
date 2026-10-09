@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Results | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/student-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div>
+            <div style="font-weight:600;">My Results</div>
+            <div class="text-muted" style="font-size:0.75rem;"><%= student.first_name %> <%= student.last_name %> · <%= student.class_name || '' %></div>
+          </div>
+        </div>
+      </header>
+      <div class="page-content">
+        <div class="card">
+          <% if (!results.length) { %>
+            <p class="text-muted">No published results yet.</p>
+          <% } else { %>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr><th>Subject</th><th>Term</th><th>Score</th><th>Grade</th><th>Comment</th></tr>
+                </thead>
+                <tbody>
+                  <% results.forEach(function(r) { %>
+                    <tr>
+                      <td><%= r.subject_name %></td>
+                      <td><%= r.term_name %></td>
+                      <td><%= r.total_score != null ? r.total_score : '—' %></td>
+                      <td><strong><%= r.grade || '—' %></strong></td>
+                      <td class="text-muted"><%= r.teacher_comment || '—' %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

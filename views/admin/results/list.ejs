@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Results | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Results</div>
+        </div>
+      </header>
+      <div class="page-content">
+        <% if (typeof flash !== 'undefined' && flash) { %>
+          <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" data-auto-dismiss><%= flash.message %></div>
+        <% } %>
+        <div class="card mb-4">
+          <form method="GET" class="flex gap-2" style="flex-wrap:wrap;align-items:flex-end;">
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Class</label>
+              <select name="class_id" class="form-control">
+                <option value="">All</option>
+                <% classes.forEach(function(c) { %>
+                  <option value="<%= c.id %>" <%= String(filters.class_id)===String(c.id)?'selected':'' %>><%= c.name %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Status</label>
+              <select name="status" class="form-control">
+                <option value="">All</option>
+                <% ['draft','submitted','approved','published'].forEach(function(s) { %>
+                  <option value="<%= s %>" <%= filters.status===s?'selected':'' %>><%= s %></option>
+                <% }) %>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-outline btn-sm">Filter</button>
+          </form>
+        </div>
+        <div class="card">
+          <form id="resultsForm" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th><input type="checkbox" onclick="document.querySelectorAll('input[name=result_ids]').forEach(c=>c.checked=this.checked)"></th>
+                    <th>Student</th>
+                    <th>Class</th>
+                    <th>Subject</th>
+                    <th>Score</th>
+                    <th>Grade</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (!results.length) { %>
+                    <tr><td colspan="7" class="text-center text-muted">No results found.</td></tr>
+                  <% } %>
+                  <% results.forEach(function(r) { %>
+                    <tr>
+                      <td>
+                        <% if (['submitted','approved'].indexOf(r.status) !== -1) { %>
+                          <input type="checkbox" name="result_ids" value="<%= r.id %>">
+                        <% } %>
+                      </td>
+                      <td><%= r.last_name %> <%= r.first_name %></td>
+                      <td><%= r.class_name %></td>
+                      <td><%= r.subject_name %></td>
+                      <td><%= r.total_score != null ? r.total_score : '—' %></td>
+                      <td><strong><%= r.grade || '—' %></strong></td>
+                      <td><span class="badge <%= statusBadgeClass(r.status) %>"><%= r.status %></span></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+            <div class="flex gap-2 mt-4">
+              <button type="submit" class="btn btn-primary btn-sm" formaction="/admin/results/approve"
+                onclick="this.form.action='/admin/results/approve'">Approve selected</button>
+              <button type="submit" class="btn btn-outline btn-sm" formaction="/admin/results/publish"
+                onclick="this.form.action='/admin/results/publish'">Publish selected</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

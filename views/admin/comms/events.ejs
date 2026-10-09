@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Events</div>
+        </div>
+        <a href="/admin/events/new" class="btn btn-primary btn-sm">New event</a>
+      </header>
+      <div class="page-content">
+        <% if (typeof flash !== 'undefined' && flash) { %>
+          <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" data-auto-dismiss><%= flash.message %></div>
+        <% } %>
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr><th>Title</th><th>Date</th><th>Time</th><th>Location</th><th>Audience</th><th>Published</th></tr>
+              </thead>
+              <tbody>
+                <% if (!events.length) { %>
+                  <tr><td colspan="6" class="text-center text-muted">No events yet.</td></tr>
+                <% } %>
+                <% events.forEach(function(e) { %>
+                  <tr>
+                    <td><%= e.title %></td>
+                    <td><%= formatDate(e.event_date) %></td>
+                    <td><%= e.start_time || '—' %><% if (e.end_time) { %> – <%= e.end_time %><% } %></td>
+                    <td><%= e.location || '—' %></td>
+                    <td><%= e.audience %></td>
+                    <td><span class="badge <%= e.is_published ? 'badge-success' : 'badge-secondary' %>"><%= e.is_published ? 'Yes' : 'No' %></span></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

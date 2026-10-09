@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/student-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div>
+            <div style="font-weight:600;">Dashboard</div>
+            <div class="text-muted" style="font-size:0.75rem;"><%= student.first_name %> <%= student.last_name %> · <%= student.student_id %></div>
+          </div>
+        </div>
+      </header>
+      <div class="page-content">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="label">Class</div>
+            <div class="value" style="font-size:1.25rem;"><%= student.class_name || '—' %></div>
+          </div>
+          <div class="stat-card">
+            <div class="label">House</div>
+            <div class="value" style="font-size:1.25rem;"><%= student.house_name || '—' %></div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Status</div>
+            <div class="value" style="font-size:1.25rem;"><span class="badge <%= statusBadgeClass(student.status) %>"><%= student.status %></span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Recent attendance</h2>
+            <a href="/student/attendance" class="btn btn-outline btn-sm">View all</a>
+          </div>
+          <div class="table-responsive">
+            <table class="table">
+              <thead><tr><th>Date</th><th>Status</th></tr></thead>
+              <tbody>
+                <% if (!attendance.length) { %>
+                  <tr><td colspan="2" class="text-center text-muted">No attendance records yet.</td></tr>
+                <% } else { attendance.slice(0,10).forEach(function(a) { %>
+                  <tr>
+                    <td><%= formatDate(a.attendance_date) %></td>
+                    <td><span class="badge <%= statusBadgeClass(a.status) %>"><%= a.status %></span></td>
+                  </tr>
+                <% }) } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

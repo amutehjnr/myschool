@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Precious Star Heritage Academy — Sign in">
+  <title><%= title %> | PSHA Portal</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body class="auth-body">
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="school-mark">PS</div>
+        <div>
+          <div class="school-name">Precious Star Heritage Academy</div>
+          <div class="school-descriptor">School Management Portal</div>
+        </div>
+      </div>
+
+      <% if (typeof flash !== 'undefined' && flash) { %>
+        <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" role="alert">
+          <%= flash.message %>
+        </div>
+      <% } %>
+
+      <%- body %>
+    </div>
+    <p class="auth-footer">&copy; <%= currentYear %> Precious Star Heritage Academy</p>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

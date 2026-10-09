@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle aria-label="Toggle menu">☰</button>
+          <div style="font-weight:600;">Users</div>
+        </div>
+        <a href="/admin/users/new" class="btn btn-primary btn-sm">Add User</a>
+      </header>
+
+      <div class="page-content">
+        <% if (typeof flash !== 'undefined' && flash) { %>
+          <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" data-auto-dismiss><%= flash.message %></div>
+        <% } %>
+
+        <div class="card mb-4">
+          <form method="GET" action="/admin/users" class="flex gap-2" style="flex-wrap:wrap; align-items:flex-end;">
+            <div class="form-group" style="margin:0; flex:1; min-width:160px;">
+              <label class="form-label" for="search">Search</label>
+              <input type="search" name="search" id="search" class="form-control" placeholder="Email…" value="<%= filters.search %>">
+            </div>
+            <div class="form-group" style="margin:0; min-width:140px;">
+              <label class="form-label" for="role">Role</label>
+              <select name="role" id="role" class="form-control">
+                <option value="">All roles</option>
+                <% roles.forEach(function(r) { %>
+                  <option value="<%= r.name %>" <%= filters.role === r.name ? 'selected' : '' %>><%= r.name %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0; min-width:120px;">
+              <label class="form-label" for="status">Status</label>
+              <select name="status" id="status" class="form-control">
+                <option value="">All</option>
+                <option value="active" <%= filters.status === 'active' ? 'selected' : '' %>>Active</option>
+                <option value="inactive" <%= filters.status === 'inactive' ? 'selected' : '' %>>Inactive</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-outline btn-sm">Filter</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Last login</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (!users.length) { %>
+                  <tr><td colspan="6" class="text-center text-muted">No users found.</td></tr>
+                <% } %>
+                <% users.forEach(function(u) { %>
+                  <tr>
+                    <td><%= u.email %></td>
+                    <td><span class="badge badge-secondary"><%= u.role_name %></span></td>
+                    <td>
+                      <% if (u.is_active) { %>
+                        <span class="badge badge-success">Active</span>
+                      <% } else { %>
+                        <span class="badge badge-danger">Inactive</span>
+                      <% } %>
+                      <% if (u.must_change_password) { %>
+                        <span class="badge badge-warning">Must change password</span>
+                      <% } %>
+                    </td>
+                    <td class="text-muted"><%= u.last_login_at ? formatDate(u.last_login_at) : '—' %></td>
+                    <td class="text-muted"><%= formatDate(u.created_at) %></td>
+                    <td>
+                      <div class="flex gap-2" style="flex-wrap:wrap;">
+                        <a href="/admin/users/<%= u.id %>/edit" class="btn btn-outline btn-sm">Edit</a>
+                        <% if (u.is_active) { %>
+                          <form method="POST" action="/admin/users/<%= u.id %>/deactivate" style="display:inline;">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <button type="submit" class="btn btn-outline btn-sm" onclick="return confirm('Deactivate this user?')">Deactivate</button>
+                          </form>
+                        <% } else { %>
+                          <form method="POST" action="/admin/users/<%= u.id %>/activate" style="display:inline;">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <button type="submit" class="btn btn-outline btn-sm">Activate</button>
+                          </form>
+                        <% } %>
+                        <form method="POST" action="/admin/users/<%= u.id %>/reset-password" style="display:inline;">
+                          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                          <button type="submit" class="btn btn-outline btn-sm" onclick="return confirm('Reset password for this user?')">Reset PW</button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+
+          <% if (totalPages > 1) { %>
+            <div class="flex items-center justify-between mt-4">
+              <span class="text-muted" style="font-size:0.875rem;">Page <%= page %> of <%= totalPages %> (<%= total %> total)</span>
+              <div class="flex gap-2">
+                <% if (page > 1) { %>
+                  <a class="btn btn-outline btn-sm" href="?page=<%= page - 1 %>&role=<%= filters.role %>&search=<%= filters.search %>&status=<%= filters.status %>">Previous</a>
+                <% } %>
+                <% if (page < totalPages) { %>
+                  <a class="btn btn-outline btn-sm" href="?page=<%= page + 1 %>&role=<%= filters.role %>&search=<%= filters.search %>&status=<%= filters.status %>">Next</a>
+                <% } %>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

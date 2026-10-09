@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrator Dashboard | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/admin-sidebar') %>
+
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle aria-label="Toggle menu">☰</button>
+          <div>
+            <div style="font-weight:600;">Dashboard</div>
+            <div class="text-muted" style="font-size:0.75rem;">Current Term</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="text-muted" style="font-size:0.875rem;"><%= typeof currentUser !== 'undefined' && currentUser ? currentUser.email : 'Administrator' %></span>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <% if (typeof flash !== 'undefined' && flash) { %>
+          <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" data-auto-dismiss><%= flash.message %></div>
+        <% } %>
+
+        <div class="mb-4">
+          <h1 style="font-size:1.5rem; font-weight:600;">Welcome back</h1>
+          <p class="text-muted">Overview of school operations</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="label">Total Students</div>
+            <div class="value"><%= stats.students %></div>
+            <div class="context">Active enrolment</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Total Teachers</div>
+            <div class="value"><%= stats.teachers %></div>
+            <div class="context">Staff members</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Parents / Guardians</div>
+            <div class="value"><%= stats.parents %></div>
+            <div class="context">Registered</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Pending Admissions</div>
+            <div class="value"><%= stats.admissions %></div>
+            <div class="context">Awaiting review</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Quick actions</h2>
+          </div>
+          <div class="flex gap-2" style="flex-wrap:wrap;">
+            <a href="/admin/users/new" class="btn btn-primary btn-sm">Add User</a>
+            <a href="/admin/users" class="btn btn-outline btn-sm">Manage Users</a>
+            <a href="/admin/roles" class="btn btn-outline btn-sm">Roles & Permissions</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

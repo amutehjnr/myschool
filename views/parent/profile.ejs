@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/parent-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">My Profile</div>
+        </div>
+        <div class="flex gap-2">
+          <a href="/parent/profile/edit" class="btn btn-primary btn-sm">Edit profile</a>
+          <a href="/auth/change-password" class="btn btn-outline btn-sm">Change password</a>
+        </div>
+      </header>
+      <div class="page-content">
+        <% if (typeof flash !== 'undefined' && flash) { %>
+          <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" data-auto-dismiss><%= flash.message %></div>
+        <% } %>
+        <div class="card" style="max-width:560px;">
+          <h1 style="font-size:1.25rem;font-weight:600;"><%= parent.first_name %> <%= parent.last_name %></h1>
+          <p class="text-muted mb-4"><%= parent.email %></p>
+          <div class="stats-grid" style="margin-bottom:16px;">
+            <div>
+              <div class="text-muted" style="font-size:0.75rem;">Phone</div>
+              <div><%= parent.phone || '—' %></div>
+            </div>
+            <div>
+              <div class="text-muted" style="font-size:0.75rem;">Relationship</div>
+              <div><%= parent.relationship || '—' %></div>
+            </div>
+            <div>
+              <div class="text-muted" style="font-size:0.75rem;">Occupation</div>
+              <div><%= parent.occupation || '—' %></div>
+            </div>
+          </div>
+          <% if (parent.address) { %>
+            <p class="mt-2"><strong>Address:</strong> <%= parent.address %></p>
+          <% } %>
+          <hr style="margin:20px 0;border:none;border-top:1px solid var(--color-border);">
+          <p><strong>Linked children:</strong></p>
+          <ul style="padding-left:18px;margin-top:8px;">
+            <% if (!children.length) { %><li class="text-muted">None linked yet — contact the school office.</li>
+            <% } else { children.forEach(function(c) { %>
+              <li>
+                <a href="/parent/children/<%= c.id %>"><%= c.first_name %> <%= c.last_name %></a>
+                <span class="text-muted">(<%= c.student_id %><% if (c.class_name) { %> · <%= c.class_name %><% } %>)</span>
+              </li>
+            <% }) } %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

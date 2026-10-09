@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assign Fees | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Assign fees</div>
+        </div>
+        <a href="/admin/fees/bills" class="btn btn-outline btn-sm">Bills</a>
+      </header>
+      <div class="page-content">
+        <div class="card" style="max-width:520px;">
+          <p class="text-muted mb-4">Assign a fee definition to an entire class or a single student.</p>
+          <form method="POST" action="/admin/fees/assign">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group">
+              <label class="form-label" for="fee_id">Fee</label>
+              <select id="fee_id" name="fee_id" class="form-control" required>
+                <% fees.forEach(function(f) { %>
+                  <option value="<%= f.id %>"><%= f.name %> — ₦<%= Number(f.amount).toLocaleString() %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="class_id">Class (all active students)</label>
+              <select id="class_id" name="class_id" class="form-control">
+                <option value="">—</option>
+                <% classes.forEach(function(c) { %>
+                  <option value="<%= c.id %>"><%= c.name %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="student_id">Or single student</label>
+              <select id="student_id" name="student_id" class="form-control">
+                <option value="">—</option>
+                <% students.forEach(function(s) { %>
+                  <option value="<%= s.id %>"><%= s.last_name %> <%= s.first_name %> (<%= s.student_id %>)</option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="amount_due">Override amount (optional)</label>
+              <input type="number" id="amount_due" name="amount_due" class="form-control" min="0" step="0.01" placeholder="Use fee default">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="due_date">Due date</label>
+              <input type="date" id="due_date" name="due_date" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Assign</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

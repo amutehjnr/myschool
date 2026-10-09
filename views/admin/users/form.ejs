@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle aria-label="Toggle menu">☰</button>
+          <div style="font-weight:600;"><%= title %></div>
+        </div>
+        <a href="/admin/users" class="btn btn-outline btn-sm">Back to users</a>
+      </header>
+
+      <div class="page-content">
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+
+        <div class="card" style="max-width:520px;">
+          <form method="POST" action="<%= mode === 'create' ? '/admin/users' : '/admin/users/' + user.id %>" novalidate>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+            <div class="form-group">
+              <label class="form-label" for="email">Email</label>
+              <input type="email" id="email" name="email" class="form-control" required
+                     value="<%= user && user.email ? user.email : '' %>">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="role_id">Role</label>
+              <select id="role_id" name="role_id" class="form-control" required>
+                <option value="">Select role</option>
+                <% roles.forEach(function(r) { %>
+                  <option value="<%= r.id %>"
+                    <%= user && (user.role_id == r.id || user.role_id === r.id) ? 'selected' : '' %>>
+                    <%= r.name %> — <%= r.description || '' %>
+                  </option>
+                <% }) %>
+              </select>
+            </div>
+
+            <% if (mode === 'create') { %>
+            <div class="form-group">
+              <label class="form-label" for="password">Password (optional)</label>
+              <input type="password" id="password" name="password" class="form-control"
+                     autocomplete="new-password" minlength="8"
+                     placeholder="Leave blank to auto-generate">
+              <p class="form-hint">If left blank, a temporary password will be generated and shown once.</p>
+            </div>
+            <% } %>
+
+            <div class="flex gap-2">
+              <button type="submit" class="btn btn-primary"><%= mode === 'create' ? 'Create user' : 'Save changes' %></button>
+              <a href="/admin/users" class="btn btn-outline">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

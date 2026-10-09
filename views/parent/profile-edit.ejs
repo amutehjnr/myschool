@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/parent-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Edit profile</div>
+        </div>
+        <a href="/parent/profile" class="btn btn-outline btn-sm">Cancel</a>
+      </header>
+      <div class="page-content">
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+        <div class="card" style="max-width:560px;">
+          <form method="POST" action="/parent/profile" novalidate>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="flex gap-4" style="flex-wrap:wrap;">
+              <div class="form-group" style="flex:1;min-width:180px;">
+                <label class="form-label" for="first_name">First name</label>
+                <input type="text" id="first_name" name="first_name" class="form-control" required
+                       value="<%= parent.first_name || parent.firstName || '' %>">
+              </div>
+              <div class="form-group" style="flex:1;min-width:180px;">
+                <label class="form-label" for="last_name">Last name</label>
+                <input type="text" id="last_name" name="last_name" class="form-control" required
+                       value="<%= parent.last_name || parent.lastName || '' %>">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="email">Email</label>
+              <input type="email" id="email" name="email" class="form-control" required
+                     value="<%= parent.email || '' %>">
+              <p class="text-muted" style="font-size:0.8rem;margin-top:4px;">Used for login. Changing it updates your sign-in email.</p>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="phone">Phone</label>
+              <input type="text" id="phone" name="phone" class="form-control"
+                     value="<%= parent.phone || '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="relationship">Relationship to student(s)</label>
+              <input type="text" id="relationship" name="relationship" class="form-control"
+                     placeholder="Father / Mother / Guardian"
+                     value="<%= parent.relationship || '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="occupation">Occupation</label>
+              <input type="text" id="occupation" name="occupation" class="form-control"
+                     value="<%= parent.occupation || '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="address">Address</label>
+              <textarea id="address" name="address" class="form-control" rows="3"><%= parent.address || '' %></textarea>
+            </div>
+            <div class="flex gap-2">
+              <button type="submit" class="btn btn-primary">Save changes</button>
+              <a href="/parent/profile" class="btn btn-outline">Cancel</a>
+            </div>
+          </form>
+          <hr style="margin:24px 0;border:none;border-top:1px solid var(--color-border);">
+          <p class="text-muted" style="font-size:0.875rem;">
+            To change your password, use
+            <a href="/auth/change-password">Change password</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

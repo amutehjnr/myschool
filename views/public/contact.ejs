@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | Precious Star Heritage Academy</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/public.css">
+</head>
+<body class="public-body">
+  <%- include('../partials/public-navbar') %>
+
+  <section class="hero" style="padding:3rem 1.5rem;">
+    <h1>Contact us</h1>
+    <p>We would love to hear from you. Send a message or visit the school.</p>
+  </section>
+
+  <section class="section">
+    <% if (typeof flash !== 'undefined' && flash) { %>
+      <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" style="max-width:900px;margin:0 auto 1.5rem;"><%= flash.message %></div>
+    <% } %>
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="alert alert-danger" style="max-width:900px;margin:0 auto 1.5rem;"><%= error %></div>
+    <% } %>
+
+    <div class="contact-grid">
+      <div class="card">
+        <h2 style="font-size:1.1rem;margin:0 0 1rem;">School details</h2>
+        <p style="margin:0 0 0.75rem;"><strong>Address</strong><br>Precious Star Heritage Academy<br>Lagos, Nigeria</p>
+        <p style="margin:0 0 0.75rem;"><strong>Email</strong><br>info@psha.edu.ng</p>
+        <p style="margin:0 0 0.75rem;"><strong>Phone</strong><br>+234 800 000 0000</p>
+        <p style="margin:0;"><strong>Office hours</strong><br>Monday – Friday, 8:00 AM – 4:00 PM</p>
+      </div>
+      <div class="card">
+        <h2 style="font-size:1.1rem;margin:0 0 1rem;">Send a message</h2>
+        <form method="POST" action="/contact" novalidate>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <div class="form-group">
+            <label class="form-label" for="name">Name *</label>
+            <input type="text" id="name" name="name" class="form-control" required
+                   value="<%= form && form.name ? form.name : '' %>">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email *</label>
+            <input type="email" id="email" name="email" class="form-control" required
+                   value="<%= form && form.email ? form.email : '' %>">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="phone">Phone</label>
+            <input type="text" id="phone" name="phone" class="form-control"
+                   value="<%= form && form.phone ? form.phone : '' %>">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" class="form-control"
+                   value="<%= form && form.subject ? form.subject : '' %>">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="message">Message *</label>
+            <textarea id="message" name="message" class="form-control" rows="5" required><%= form && form.message ? form.message : '' %></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Send message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <%- include('../partials/public-footer') %>
+</body>
+</html>

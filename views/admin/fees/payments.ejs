@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payments | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Payments</div>
+        </div>
+        <a href="/admin/fees/bills" class="btn btn-outline btn-sm">Bills</a>
+      </header>
+      <div class="page-content">
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Student</th>
+                  <th>Fee</th>
+                  <th>Amount</th>
+                  <th>Method</th>
+                  <th>Reference</th>
+                  <th>Receipt</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (!payments.length) { %>
+                  <tr><td colspan="7" class="text-center text-muted">No payments recorded.</td></tr>
+                <% } %>
+                <% payments.forEach(function(p) { %>
+                  <tr>
+                    <td><%= p.paid_at ? formatDate(p.paid_at) : '—' %></td>
+                    <td><%= p.last_name %> <%= p.first_name %></td>
+                    <td><%= p.fee_name %></td>
+                    <td>₦<%= Number(p.amount).toLocaleString() %></td>
+                    <td><%= p.payment_method || '—' %></td>
+                    <td><%= p.payment_reference || '—' %></td>
+                    <td>
+                      <% if (p.receipt_number) { %>
+                        <a href="/admin/fees/payments/<%= p.id %>"><%= p.receipt_number %></a>
+                      <% } else { %>—<% } %>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

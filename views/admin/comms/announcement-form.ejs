@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;"><%= title %></div>
+        </div>
+        <a href="/admin/announcements" class="btn btn-outline btn-sm">Back</a>
+      </header>
+      <div class="page-content">
+        <% if (typeof error !== 'undefined' && error) { %><div class="alert alert-danger"><%= error %></div><% } %>
+        <div class="card" style="max-width:640px;">
+          <form method="POST" action="/admin/announcements">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group">
+              <label class="form-label" for="title">Title</label>
+              <input type="text" id="title" name="title" class="form-control" required
+                     value="<%= announcement && announcement.title ? announcement.title : '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="body">Body</label>
+              <textarea id="body" name="body" class="form-control" rows="6" required><%= announcement && announcement.body ? announcement.body : '' %></textarea>
+            </div>
+            <div class="flex gap-4" style="flex-wrap:wrap;">
+              <div class="form-group" style="flex:1;min-width:140px;">
+                <label class="form-label" for="audience">Audience</label>
+                <select id="audience" name="audience" class="form-control">
+                  <option value="all">Everyone</option>
+                  <option value="teachers">Teachers</option>
+                  <option value="students">Students</option>
+                  <option value="parents">Parents</option>
+                  <option value="class">Specific class</option>
+                </select>
+              </div>
+              <div class="form-group" style="flex:1;min-width:140px;">
+                <label class="form-label" for="target_class_id">Class (if audience = class)</label>
+                <select id="target_class_id" name="target_class_id" class="form-control">
+                  <option value="">—</option>
+                  <% classes.forEach(function(c) { %>
+                    <option value="<%= c.id %>"><%= c.name %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="form-group" style="flex:1;min-width:120px;">
+                <label class="form-label" for="priority">Priority</label>
+                <select id="priority" name="priority" class="form-control">
+                  <option value="normal">Normal</option>
+                  <option value="important">Important</option>
+                  <option value="emergency">Emergency</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="expires_at">Expires (optional)</label>
+              <input type="datetime-local" id="expires_at" name="expires_at" class="form-control">
+            </div>
+            <div class="form-group">
+              <label style="display:flex;gap:8px;align-items:center;">
+                <input type="checkbox" name="publish" value="1" checked>
+                Publish immediately (sends in-app notifications)
+              </label>
+            </div>
+            <button type="submit" class="btn btn-primary">Save announcement</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

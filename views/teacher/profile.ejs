@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/teacher-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">My Profile</div>
+        </div>
+        <a href="/auth/change-password" class="btn btn-outline btn-sm">Change password</a>
+      </header>
+      <div class="page-content">
+        <div class="card" style="max-width:560px;">
+          <h1 style="font-size:1.25rem;font-weight:600;margin-bottom:4px;"><%= teacher.first_name %> <%= teacher.last_name %></h1>
+          <p class="text-muted mb-4"><%= teacher.staff_id %></p>
+          <p><strong>Email:</strong> <%= teacher.email %></p>
+          <p class="mt-2"><strong>Phone:</strong> <%= teacher.phone || '—' %></p>
+          <p class="mt-2"><strong>Department:</strong> <%= teacher.department_name || '—' %></p>
+          <p class="mt-2"><strong>Qualification:</strong> <%= teacher.qualification || '—' %></p>
+          <p class="mt-2"><strong>Employment date:</strong> <%= teacher.employment_date ? formatDate(teacher.employment_date) : '—' %></p>
+          <hr style="margin:20px 0;border:none;border-top:1px solid var(--color-border);">
+          <p><strong>Subjects:</strong>
+            <% if (!teacher.subjects || !teacher.subjects.length) { %>—<% } else { %>
+              <%= teacher.subjects.map(function(s){ return s.name; }).join(', ') %>
+            <% } %>
+          </p>
+          <p class="mt-2"><strong>Classes:</strong>
+            <% if (!teacher.classes || !teacher.classes.length) { %>—<% } else { %>
+              <%= teacher.classes.map(function(c){ return c.name; }).join(', ') %>
+            <% } %>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

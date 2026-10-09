@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Attendance | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Teacher attendance</div>
+        </div>
+        <a href="/admin/attendance/devices" class="btn btn-outline btn-sm">Devices</a>
+      </header>
+      <div class="page-content">
+        <div class="card mb-4">
+          <form method="GET" class="flex gap-2" style="flex-wrap:wrap;align-items:flex-end;">
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">From</label>
+              <input type="date" name="from" class="form-control" value="<%= filters.from %>">
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">To</label>
+              <input type="date" name="to" class="form-control" value="<%= filters.to %>">
+            </div>
+            <button type="submit" class="btn btn-outline btn-sm">Filter</button>
+          </form>
+        </div>
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr><th>Date</th><th>Teacher</th><th>Staff ID</th><th>Check-in</th><th>Check-out</th><th>Minutes</th><th>Status</th><th>Source</th></tr>
+              </thead>
+              <tbody>
+                <% if (!records.length) { %>
+                  <tr><td colspan="8" class="text-center text-muted">No attendance records.</td></tr>
+                <% } %>
+                <% records.forEach(function(r) { %>
+                  <tr>
+                    <td><%= formatDate(r.attendance_date) %></td>
+                    <td><%= r.last_name %> <%= r.first_name %></td>
+                    <td><code><%= r.staff_id %></code></td>
+                    <td><%= r.check_in_time ? formatDate(r.check_in_time) : '—' %></td>
+                    <td><%= r.check_out_time ? formatDate(r.check_out_time) : '—' %></td>
+                    <td><%= r.total_minutes != null ? r.total_minutes : '—' %></td>
+                    <td><span class="badge <%= statusBadgeClass(r.status) %>"><%= r.status %></span></td>
+                    <td><%= r.source %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

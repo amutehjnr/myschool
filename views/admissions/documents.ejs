@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Documents | PSHA Admissions</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/public.css">
+</head>
+<body class="public-body">
+  <%- include('../partials/public-navbar') %>
+  <section class="section">
+    <h1 class="section-title">Upload documents</h1>
+    <p style="text-align:center;color:var(--color-text-muted);margin-bottom:8px;">
+      Reference: <strong><%= application.reference_number %></strong>
+      · Status: <span class="badge <%= statusBadgeClass(application.status) %>"><%= application.status %></span>
+    </p>
+    <p style="text-align:center;color:var(--color-text-muted);margin-bottom:24px;font-size:0.875rem;">
+      Allowed: PDF, JPG, PNG, WEBP, DOC, DOCX · Max 5 MB each
+    </p>
+
+    <% if (typeof flash !== 'undefined' && flash) { %>
+      <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" style="max-width:640px;margin:0 auto 16px;"><%= flash.message %></div>
+    <% } %>
+
+    <div class="card" style="max-width:640px;margin:0 auto 24px;">
+      <form method="POST" action="/admissions/application/<%= application.id %>/documents" enctype="multipart/form-data">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="form-group">
+          <label class="form-label" for="document_type">Document type</label>
+          <select id="document_type" name="document_type" class="form-control">
+            <option value="birth_certificate">Birth certificate</option>
+            <option value="passport_photo">Passport photograph</option>
+            <option value="previous_result">Previous school result</option>
+            <option value="medical">Medical report</option>
+            <option value="supporting">Other supporting document</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="document">File</label>
+          <input type="file" id="document" name="document" class="form-control" required
+                 accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx">
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+      </form>
+    </div>
+
+    <div class="card" style="max-width:640px;margin:0 auto;">
+      <h2 style="font-size:1rem;margin-bottom:12px;">Uploaded files</h2>
+      <% if (!application.documents || !application.documents.length) { %>
+        <p class="text-muted">No documents uploaded yet.</p>
+      <% } else { %>
+        <ul style="padding-left:18px;">
+          <% application.documents.forEach(function(d) { %>
+            <li><%= d.original_filename %> <span class="text-muted">(<%= d.document_type %> · <%= Math.round(d.file_size/1024) %> KB)</span></li>
+          <% }) %>
+        </ul>
+      <% } %>
+      <div class="mt-4 flex gap-2">
+        <a href="/admissions/application/<%= application.id %>/review" class="btn btn-primary">Review & submit</a>
+      </div>
+    </div>
+  </section>
+  <%- include('../partials/public-footer') %>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Students | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Students</div>
+        </div>
+        <a href="/admin/students/new" class="btn btn-primary btn-sm">Add Student</a>
+      </header>
+      <div class="page-content">
+        <% if (typeof flash !== 'undefined' && flash) { %>
+          <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" data-auto-dismiss><%= flash.message %></div>
+        <% } %>
+        <div class="card mb-4">
+          <form method="GET" action="/admin/students" class="flex gap-2" style="flex-wrap:wrap;align-items:flex-end;">
+            <div class="form-group" style="margin:0;flex:1;min-width:160px;">
+              <label class="form-label" for="search">Search</label>
+              <input type="search" name="search" id="search" class="form-control" placeholder="Name or student ID…" value="<%= filters.search %>">
+            </div>
+            <div class="form-group" style="margin:0;min-width:140px;">
+              <label class="form-label" for="class_id">Class</label>
+              <select name="class_id" id="class_id" class="form-control">
+                <option value="">All</option>
+                <% classes.forEach(function(c) { %>
+                  <option value="<%= c.id %>" <%= String(filters.class_id) === String(c.id) ? 'selected' : '' %>><%= c.name %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0;min-width:120px;">
+              <label class="form-label" for="status">Status</label>
+              <select name="status" id="status" class="form-control">
+                <option value="active" <%= filters.status === 'active' ? 'selected' : '' %>>Active</option>
+                <option value="withdrawn" <%= filters.status === 'withdrawn' ? 'selected' : '' %>>Withdrawn</option>
+                <option value="graduated" <%= filters.status === 'graduated' ? 'selected' : '' %>>Graduated</option>
+                <option value="" <%= filters.status === '' ? 'selected' : '' %>>All</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-outline btn-sm">Filter</button>
+          </form>
+        </div>
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr><th>Student ID</th><th>Name</th><th>Class</th><th>House</th><th>Gender</th><th>Status</th><th>Actions</th></tr>
+              </thead>
+              <tbody>
+                <% if (!students.length) { %>
+                  <tr><td colspan="7" class="text-center text-muted">No students found.</td></tr>
+                <% } %>
+                <% students.forEach(function(s) { %>
+                  <tr>
+                    <td><%= s.student_id %></td>
+                    <td><a href="/admin/students/<%= s.id %>"><%= s.first_name %> <%= s.last_name %></a></td>
+                    <td><%= s.class_name || '—' %></td>
+                    <td><%= s.house_name || '—' %></td>
+                    <td><%= s.gender || '—' %></td>
+                    <td><span class="badge <%= statusBadgeClass(s.status) %>"><%= s.status %></span></td>
+                    <td>
+                      <div class="flex gap-2" style="flex-wrap:wrap;">
+                        <a href="/admin/students/<%= s.id %>" class="btn btn-outline btn-sm">View</a>
+                        <a href="/admin/students/<%= s.id %>/edit" class="btn btn-outline btn-sm">Edit</a>
+                        <% if (s.status === 'active') { %>
+                          <form method="POST" action="/admin/students/<%= s.id %>/archive" style="display:inline;">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <button type="submit" class="btn btn-outline btn-sm" onclick="return confirm('Archive (withdraw) this student?')">Archive</button>
+                          </form>
+                        <% } %>
+                      </div>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+          <% if (totalPages > 1) { %>
+            <div class="flex items-center justify-between mt-4">
+              <span class="text-muted" style="font-size:0.875rem;">Page <%= page %> of <%= totalPages %> (<%= total %> total)</span>
+              <div class="flex gap-2">
+                <% if (page > 1) { %><a class="btn btn-outline btn-sm" href="?page=<%= page-1 %>&search=<%= filters.search %>&class_id=<%= filters.class_id %>&status=<%= filters.status %>">Previous</a><% } %>
+                <% if (page < totalPages) { %><a class="btn btn-outline btn-sm" href="?page=<%= page+1 %>&search=<%= filters.search %>&class_id=<%= filters.class_id %>&status=<%= filters.status %>">Next</a><% } %>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

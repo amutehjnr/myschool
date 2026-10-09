@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Student profile</div>
+        </div>
+        <div class="flex gap-2">
+          <a href="/admin/students/<%= student.id %>/edit" class="btn btn-primary btn-sm">Edit</a>
+          <a href="/admin/students" class="btn btn-outline btn-sm">Back</a>
+        </div>
+      </header>
+      <div class="page-content">
+        <div class="card mb-4">
+          <div class="flex justify-between items-center" style="flex-wrap:wrap;gap:12px;">
+            <div>
+              <h1 style="font-size:1.35rem;font-weight:600;"><%= student.first_name %> <%= student.last_name %></h1>
+              <p class="text-muted"><%= student.student_id %><% if (student.email) { %> · <%= student.email %><% } %></p>
+            </div>
+            <span class="badge <%= statusBadgeClass(student.status) %>"><%= student.status %></span>
+          </div>
+          <div class="stats-grid" style="margin-top:20px;">
+            <div><div class="text-muted" style="font-size:0.75rem;">Class</div><div><%= student.class_name || '—' %></div></div>
+            <div><div class="text-muted" style="font-size:0.75rem;">House</div><div><%= student.house_name || '—' %></div></div>
+            <div><div class="text-muted" style="font-size:0.75rem;">Gender</div><div><%= student.gender || '—' %></div></div>
+            <div><div class="text-muted" style="font-size:0.75rem;">Date of birth</div><div><%= student.date_of_birth ? formatDate(student.date_of_birth) : '—' %></div></div>
+            <div><div class="text-muted" style="font-size:0.75rem;">Session</div><div><%= student.session_name || '—' %></div></div>
+            <div><div class="text-muted" style="font-size:0.75rem;">Admission</div><div><%= student.admission_date ? formatDate(student.admission_date) : '—' %></div></div>
+          </div>
+        </div>
+        <div class="card mb-4">
+          <h2 class="card-title mb-2">Parents / Guardians</h2>
+          <% if (typeof flash !== 'undefined' && flash) { %>
+            <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" data-auto-dismiss><%= flash.message %></div>
+          <% } %>
+          <% if (!student.parents || !student.parents.length) { %>
+            <p class="text-muted">No parents linked.</p>
+          <% } else { %>
+            <table class="table">
+              <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Relationship</th><th></th></tr></thead>
+              <tbody>
+                <% student.parents.forEach(function(p) { %>
+                  <tr>
+                    <td><%= p.first_name %> <%= p.last_name %><% if (p.is_primary) { %> <span class="badge badge-info">Primary</span><% } %></td>
+                    <td><%= p.email %></td>
+                    <td><%= p.phone || '—' %></td>
+                    <td><%= p.relationship || '—' %></td>
+                    <td>
+                      <form method="POST" action="/admin/students/<%= student.id %>/unlink-parent" style="display:inline;"
+                            onsubmit="return confirm('Unlink this parent?');">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <input type="hidden" name="parent_id" value="<%= p.id %>">
+                        <button type="submit" class="btn btn-outline btn-sm">Unlink</button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } %>
+
+          <hr style="margin:20px 0;border:none;border-top:1px solid var(--color-border);">
+          <h3 style="font-size:1rem;margin-bottom:12px;">Link a parent</h3>
+          <form method="POST" action="/admin/students/<%= student.id %>/link-parent" class="flex gap-2" style="flex-wrap:wrap;align-items:flex-end;">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group" style="margin:0;flex:1;min-width:220px;">
+              <label class="form-label" for="parent_id">Parent account</label>
+              <select id="parent_id" name="parent_id" class="form-control" required>
+                <option value="">Select parent…</option>
+                <% (typeof allParents !== 'undefined' ? allParents : []).forEach(function(pr) { %>
+                  <option value="<%= pr.id %>"><%= pr.last_name %> <%= pr.first_name %> — <%= pr.email %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label style="display:flex;gap:6px;align-items:center;font-size:0.875rem;">
+                <input type="checkbox" name="is_primary" value="1"> Primary guardian
+              </label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Link parent</button>
+          </form>
+        </div>
+        <div class="card">
+          <h2 class="card-title mb-2">Recent attendance</h2>
+          <div class="table-responsive">
+            <table class="table">
+              <thead><tr><th>Date</th><th>Status</th><th>Notes</th></tr></thead>
+              <tbody>
+                <% if (!student.attendance || !student.attendance.length) { %>
+                  <tr><td colspan="3" class="text-center text-muted">No records yet.</td></tr>
+                <% } else { student.attendance.forEach(function(a) { %>
+                  <tr>
+                    <td><%= formatDate(a.attendance_date) %></td>
+                    <td><span class="badge <%= statusBadgeClass(a.status) %>"><%= a.status %></span></td>
+                    <td><%= a.notes || '—' %></td>
+                  </tr>
+                <% }) } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

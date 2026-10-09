@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roles | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle aria-label="Toggle menu">☰</button>
+          <div style="font-weight:600;">Roles & Permissions</div>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <% if (typeof flash !== 'undefined' && flash) { %>
+          <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" data-auto-dismiss><%= flash.message %></div>
+        <% } %>
+
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Role</th>
+                  <th>Description</th>
+                  <th>Users</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% roles.forEach(function(r) { %>
+                  <tr>
+                    <td><strong><%= r.name %></strong></td>
+                    <td class="text-muted"><%= r.description || '—' %></td>
+                    <td><%= r.user_count %></td>
+                    <td>
+                      <a href="/admin/roles/<%= r.id %>/permissions" class="btn btn-outline btn-sm">Manage permissions</a>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

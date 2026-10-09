@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Dashboard | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/teacher-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle aria-label="Toggle menu">☰</button>
+          <div>
+            <div style="font-weight:600;">Dashboard</div>
+            <div class="text-muted" style="font-size:0.75rem;"><%= teacher.first_name %> <%= teacher.last_name %> · <%= teacher.staff_id %></div>
+          </div>
+        </div>
+      </header>
+      <div class="page-content">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="label">Assigned classes</div>
+            <div class="value"><%= classes.length %></div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Subjects</div>
+            <div class="value"><%= subjects.length %></div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Today's periods</div>
+            <div class="value"><%= todayTimetable.length %></div>
+          </div>
+        </div>
+        <div class="flex gap-4" style="flex-wrap:wrap;">
+          <div class="card" style="flex:1;min-width:280px;">
+            <h2 class="card-title mb-2">Today's timetable</h2>
+            <% if (!todayTimetable.length) { %><p class="text-muted">No periods scheduled for today.</p>
+            <% } else { %>
+              <table class="table">
+                <thead><tr><th>Time</th><th>Subject</th><th>Class</th><th>Room</th></tr></thead>
+                <tbody>
+                  <% todayTimetable.forEach(function(t) { %>
+                    <tr>
+                      <td><%= t.start_time %> – <%= t.end_time %></td>
+                      <td><%= t.subject_name %></td>
+                      <td><%= t.class_name %></td>
+                      <td><%= t.room || '—' %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            <% } %>
+          </div>
+          <div class="card" style="flex:1;min-width:240px;">
+            <h2 class="card-title mb-2">My classes</h2>
+            <% if (!classes.length) { %><p class="text-muted">No classes assigned.</p>
+            <% } else { %><ul style="padding-left:18px;"><% classes.forEach(function(c) { %><li><%= c.name %><% if (c.is_class_teacher) { %> · class teacher<% } %></li><% }) %></ul><% } %>
+            <h2 class="card-title mb-2 mt-4">Subjects</h2>
+            <% if (!subjects.length) { %><p class="text-muted">None</p>
+            <% } else { %><ul style="padding-left:18px;"><% subjects.forEach(function(s) { %><li><%= s.name %></li><% }) %></ul><% } %>
+          </div>
+        </div>
+        <div class="card mt-4">
+          <div class="card-header">
+            <h2 class="card-title">Recent attendance</h2>
+            <a href="/teacher/attendance" class="btn btn-outline btn-sm">View all</a>
+          </div>
+          <div class="table-responsive">
+            <table class="table">
+              <thead><tr><th>Date</th><th>Check-in</th><th>Check-out</th><th>Status</th></tr></thead>
+              <tbody>
+                <% if (!attendance.length) { %>
+                  <tr><td colspan="4" class="text-center text-muted">No records yet.</td></tr>
+                <% } else { attendance.slice(0,7).forEach(function(a) { %>
+                  <tr>
+                    <td><%= formatDate(a.attendance_date) %></td>
+                    <td><%= a.check_in_time ? formatTime(a.check_in_time) : '—' %></td>
+                    <td><%= a.check_out_time ? formatTime(a.check_out_time) : '—' %></td>
+                    <td><span class="badge <%= statusBadgeClass(a.status) %>"><%= a.status %></span></td>
+                  </tr>
+                <% }) } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

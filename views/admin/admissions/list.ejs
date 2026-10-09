@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admissions | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Admissions</div>
+        </div>
+      </header>
+      <div class="page-content">
+        <% if (typeof flash !== 'undefined' && flash) { %>
+          <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" data-auto-dismiss><%= flash.message %></div>
+        <% } %>
+        <div class="card mb-4">
+          <form method="GET" action="/admin/admissions" class="flex gap-2" style="flex-wrap:wrap;align-items:flex-end;">
+            <div class="form-group" style="margin:0;flex:1;min-width:160px;">
+              <label class="form-label" for="search">Search</label>
+              <input type="search" name="search" id="search" class="form-control" placeholder="Reference, name, email…" value="<%= filters.search %>">
+            </div>
+            <div class="form-group" style="margin:0;min-width:160px;">
+              <label class="form-label" for="status">Status</label>
+              <select name="status" id="status" class="form-control">
+                <option value="">All</option>
+                <% ['draft','submitted','under_review','additional_info_required','approved','rejected'].forEach(function(s) { %>
+                  <option value="<%= s %>" <%= filters.status === s ? 'selected' : '' %>><%= s %></option>
+                <% }) %>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-outline btn-sm">Filter</button>
+          </form>
+        </div>
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Reference</th>
+                  <th>Applicant</th>
+                  <th>Class</th>
+                  <th>Parent contact</th>
+                  <th>Status</th>
+                  <th>Submitted</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (!applications.length) { %>
+                  <tr><td colspan="7" class="text-center text-muted">No applications found.</td></tr>
+                <% } %>
+                <% applications.forEach(function(a) { %>
+                  <tr>
+                    <td><%= a.reference_number %></td>
+                    <td><%= a.applicant_first_name %> <%= a.applicant_last_name %></td>
+                    <td><%= a.applying_for_class || '—' %></td>
+                    <td><%= a.parent_email || a.parent_phone || '—' %></td>
+                    <td><span class="badge <%= statusBadgeClass(a.status) %>"><%= a.status %></span></td>
+                    <td class="text-muted"><%= a.submitted_at ? formatDate(a.submitted_at) : '—' %></td>
+                    <td><a href="/admin/admissions/<%= a.id %>" class="btn btn-outline btn-sm">Review</a></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+          <% if (totalPages > 1) { %>
+            <div class="flex items-center justify-between mt-4">
+              <span class="text-muted" style="font-size:0.875rem;">Page <%= page %> of <%= totalPages %></span>
+              <div class="flex gap-2">
+                <% if (page > 1) { %><a class="btn btn-outline btn-sm" href="?page=<%= page-1 %>&status=<%= filters.status %>&search=<%= filters.search %>">Previous</a><% } %>
+                <% if (page < totalPages) { %><a class="btn btn-outline btn-sm" href="?page=<%= page+1 %>&status=<%= filters.status %>&search=<%= filters.search %>">Next</a><% } %>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

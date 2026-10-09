@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fees | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Fee definitions</div>
+        </div>
+        <div class="flex gap-2">
+          <a href="/admin/fees/assign" class="btn btn-outline btn-sm">Assign fees</a>
+          <a href="/admin/fees/bills" class="btn btn-outline btn-sm">Bills</a>
+          <a href="/admin/fees/payments" class="btn btn-outline btn-sm">Payments</a>
+          <a href="/admin/fees/new" class="btn btn-primary btn-sm">New fee</a>
+        </div>
+      </header>
+      <div class="page-content">
+        <% if (typeof flash !== 'undefined' && flash) { %>
+          <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" data-auto-dismiss><%= flash.message %></div>
+        <% } %>
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr><th>Name</th><th>Category</th><th>Amount</th><th>Class</th><th>Due</th><th>Active</th></tr>
+              </thead>
+              <tbody>
+                <% if (!fees.length) { %>
+                  <tr><td colspan="6" class="text-center text-muted">No fee definitions. Create one or run seed.</td></tr>
+                <% } %>
+                <% fees.forEach(function(f) { %>
+                  <tr>
+                    <td><%= f.name %></td>
+                    <td><%= f.category_name %></td>
+                    <td>₦<%= Number(f.amount).toLocaleString() %></td>
+                    <td><%= f.class_name || 'All / assign manually' %></td>
+                    <td><%= f.due_date ? formatDate(f.due_date) : '—' %></td>
+                    <td><span class="badge <%= f.is_active ? 'badge-success' : 'badge-secondary' %>"><%= f.is_active ? 'Yes' : 'No' %></span></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

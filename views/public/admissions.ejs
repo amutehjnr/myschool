@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Admissions at Precious Star Heritage Academy — apply online">
+  <title>Admissions | Precious Star Heritage Academy</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/public.css">
+</head>
+<body class="public-body">
+  <%- include('../partials/public-navbar') %>
+
+  <section class="hero" style="padding:3rem 1.5rem;">
+    <h1>Admissions</h1>
+    <p>We welcome applications from families who share our values of excellence, integrity and service.</p>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">How to apply</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">1</div>
+        <h3>Start online</h3>
+        <p>Complete the application form with applicant and parent details.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">2</div>
+        <h3>Upload documents</h3>
+        <p>Birth certificate, passport photo, previous results and other supporting files.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">3</div>
+        <h3>Submit & track</h3>
+        <p>Receive a reference number and track your application status online.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">4</div>
+        <h3>Decision</h3>
+        <p>Our team reviews applications and contacts families with next steps.</p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:2rem;" class="flex gap-2" style="justify-content:center;flex-wrap:wrap;">
+      <a href="/admissions/apply" class="btn btn-primary">Start application</a>
+      <a href="/admissions/status" class="btn btn-outline">Track application</a>
+      <a href="/contact" class="btn btn-outline">Ask a question</a>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <h2 class="section-title">What you will need</h2>
+    <p class="section-lead" style="text-align:left;max-width:640px;">
+      Typical documents include a birth certificate or age declaration, recent passport photograph,
+      previous school report (where applicable), and parent/guardian contact details.
+      Exact requirements may vary by class level.
+    </p>
+  </section>
+
+  <%- include('../partials/public-footer') %>
+</body>
+</html>

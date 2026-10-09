@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | PSHA Portal</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body class="auth-body">
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="school-mark">PS</div>
+        <div>
+          <div class="school-name">Precious Star Heritage Academy</div>
+          <div class="school-descriptor">School Management Portal</div>
+        </div>
+      </div>
+
+      <% if (typeof flash !== 'undefined' && flash) { %>
+        <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" role="alert" data-auto-dismiss>
+          <%= flash.message %>
+        </div>
+      <% } %>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-danger" role="alert">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <h1 class="auth-title">Sign in</h1>
+      <p class="auth-subtitle">Enter your credentials to access the portal</p>
+
+      <form method="POST" action="/auth/login" novalidate>
+        <input type="hidden" name="_csrf" value="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>">
+
+        <div class="form-group">
+          <label class="form-label" for="email">Email address</label>
+          <input type="email" id="email" name="email" class="form-control"
+                 required autocomplete="username" placeholder="you@example.com"
+                 value="<%= typeof email !== 'undefined' ? email : '' %>">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-control"
+                 required autocomplete="current-password" placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+      </form>
+
+      <div class="auth-links">
+        <a href="/auth/forgot-password">Forgot your password?</a>
+        <a href="/auth/register">Create a parent account</a>
+      </div>
+    </div>
+    <p class="auth-footer">&copy; <%= typeof currentYear !== 'undefined' ? currentYear : new Date().getFullYear() %> Precious Star Heritage Academy</p>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

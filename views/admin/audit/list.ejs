@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audit Log | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Audit log</div>
+        </div>
+        <a href="/admin/security" class="btn btn-outline btn-sm">Security checklist</a>
+      </header>
+      <div class="page-content">
+        <% if (summary && summary.length) { %>
+          <div class="stats-grid mb-4">
+            <% summary.slice(0, 6).forEach(function(s) { %>
+              <div class="stat-card">
+                <div class="label"><%= s.action %></div>
+                <div class="value" style="font-size:1.25rem;"><%= s.cnt %></div>
+                <div class="context">Last 7 days</div>
+              </div>
+            <% }) %>
+          </div>
+        <% } %>
+
+        <div class="card mb-4">
+          <form method="GET" class="flex gap-2" style="flex-wrap:wrap;align-items:flex-end;">
+            <div class="form-group" style="margin:0;flex:1;min-width:140px;">
+              <label class="form-label">Search</label>
+              <input type="search" name="search" class="form-control" placeholder="Email, action, IP…" value="<%= filters.search %>">
+            </div>
+            <div class="form-group" style="margin:0;min-width:140px;">
+              <label class="form-label">Action</label>
+              <select name="action" class="form-control">
+                <option value="">All</option>
+                <% actions.forEach(function(a) { %>
+                  <option value="<%= a %>" <%= filters.action === a ? 'selected' : '' %>><%= a %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0;min-width:120px;">
+              <label class="form-label">Module</label>
+              <select name="module" class="form-control">
+                <option value="">All</option>
+                <% modules.forEach(function(m) { %>
+                  <option value="<%= m %>" <%= filters.module === m ? 'selected' : '' %>><%= m %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0;min-width:100px;">
+              <label class="form-label">Status</label>
+              <select name="status" class="form-control">
+                <option value="">All</option>
+                <option value="success" <%= filters.status === 'success' ? 'selected' : '' %>>success</option>
+                <option value="failure" <%= filters.status === 'failure' ? 'selected' : '' %>>failure</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">From</label>
+              <input type="date" name="from" class="form-control" value="<%= filters.from %>">
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">To</label>
+              <input type="date" name="to" class="form-control" value="<%= filters.to %>">
+            </div>
+            <button type="submit" class="btn btn-outline btn-sm">Filter</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>User</th>
+                  <th>Action</th>
+                  <th>Module</th>
+                  <th>Status</th>
+                  <th>IP</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (!logs.length) { %>
+                  <tr><td colspan="7" class="text-center text-muted">No audit entries match.</td></tr>
+                <% } %>
+                <% logs.forEach(function(l) { %>
+                  <tr>
+                    <td class="text-muted" style="white-space:nowrap;"><%= formatDate(l.created_at) %></td>
+                    <td><%= l.user_email || '—' %></td>
+                    <td><code style="font-size:0.8rem;"><%= l.action %></code></td>
+                    <td><%= l.module || '—' %></td>
+                    <td><span class="badge <%= l.status === 'success' ? 'badge-success' : 'badge-danger' %>"><%= l.status %></span></td>
+                    <td class="text-muted"><%= l.ip_address || '—' %></td>
+                    <td><a href="/admin/audit/<%= l.id %>" class="btn btn-outline btn-sm">View</a></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+          <% if (totalPages > 1) { %>
+            <div class="flex items-center justify-between mt-4">
+              <span class="text-muted" style="font-size:0.875rem;">Page <%= page %> of <%= totalPages %> (<%= total %> total)</span>
+              <div class="flex gap-2">
+                <% if (page > 1) { %><a class="btn btn-outline btn-sm" href="?page=<%= page-1 %>&action=<%= filters.action %>&module=<%= filters.module %>&status=<%= filters.status %>&from=<%= filters.from %>&to=<%= filters.to %>&search=<%= filters.search %>">Previous</a><% } %>
+                <% if (page < totalPages) { %><a class="btn btn-outline btn-sm" href="?page=<%= page+1 %>&action=<%= filters.action %>&module=<%= filters.module %>&status=<%= filters.status %>&from=<%= filters.from %>&to=<%= filters.to %>&search=<%= filters.search %>">Next</a><% } %>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <% 
+      var role = String(typeof currentUser !== 'undefined' && currentUser.role ? currentUser.role : (typeof userRole !== 'undefined' ? userRole : '')).toLowerCase();
+      if (role === 'teacher') { %><%- include('../partials/teacher-sidebar') %><% }
+      else if (role === 'student') { %><%- include('../partials/student-sidebar') %><% }
+      else if (role === 'parent') { %><%- include('../partials/parent-sidebar') %><% }
+      else { %><%- include('../partials/admin-sidebar') %><% }
+    %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Notifications <% if (unread) { %><span class="badge badge-danger"><%= unread %></span><% } %></div>
+        </div>
+        <% if (unread) { %>
+          <form method="POST" action="/notifications/read-all">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button type="submit" class="btn btn-outline btn-sm">Mark all read</button>
+          </form>
+        <% } %>
+      </header>
+      <div class="page-content">
+        <div class="card">
+          <% if (!notifications.length) { %>
+            <p class="text-muted">No notifications.</p>
+          <% } else { %>
+            <ul style="list-style:none;padding:0;margin:0;">
+              <% notifications.forEach(function(n) { %>
+                <li style="padding:12px 0;border-bottom:1px solid var(--color-border);<%= n.is_read ? '' : 'background:rgba(59,130,246,0.06);' %>">
+                  <div class="flex justify-between items-center" style="flex-wrap:wrap;gap:8px;">
+                    <div>
+                      <strong><%= n.title %></strong>
+                      <% if (n.body) { %><p class="text-muted" style="font-size:0.875rem;margin-top:4px;"><%= n.body %></p><% } %>
+                      <span class="text-muted" style="font-size:0.75rem;"><%= formatDate(n.created_at) %></span>
+                    </div>
+                    <% if (!n.is_read) { %>
+                      <form method="POST" action="/notifications/<%= n.id %>/read">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="submit" class="btn btn-outline btn-sm">Mark read</button>
+                      </form>
+                    <% } %>
+                  </div>
+                </li>
+              <% }) %>
+            </ul>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receipt <%= payment.receipt_number || '' %> | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <style>
+    @media print {
+      .sidebar, .top-navbar, .no-print { display: none !important; }
+      .main-content { margin: 0 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar no-print">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Payment receipt</div>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="window.print()" class="btn btn-primary btn-sm">Print</button>
+          <a href="/admin/fees/payments" class="btn btn-outline btn-sm">Back</a>
+        </div>
+      </header>
+      <div class="page-content">
+        <div class="card" style="max-width:480px;">
+          <div style="text-align:center;margin-bottom:20px;">
+            <div style="font-weight:700;font-size:1.25rem;">Precious Star Heritage Academy</div>
+            <div class="text-muted">Official Payment Receipt</div>
+          </div>
+          <p><strong>Receipt No:</strong> <%= payment.receipt_number || '—' %></p>
+          <p class="mt-2"><strong>Payment Ref:</strong> <%= payment.payment_reference %></p>
+          <p class="mt-2"><strong>Date:</strong> <%= payment.paid_at ? formatDate(payment.paid_at) : '—' %></p>
+          <hr style="margin:16px 0;border:none;border-top:1px solid var(--color-border);">
+          <p><strong>Student:</strong> <%= payment.last_name %> <%= payment.first_name %> (<%= payment.student_code %>)</p>
+          <p class="mt-2"><strong>Fee:</strong> <%= payment.fee_name %></p>
+          <p class="mt-2"><strong>Amount paid:</strong> ₦<%= Number(payment.amount).toLocaleString() %></p>
+          <p class="mt-2"><strong>Method:</strong> <%= payment.payment_method || '—' %></p>
+          <% if (payment.notes) { %><p class="mt-2"><strong>Notes:</strong> <%= payment.notes %></p><% } %>
+          <hr style="margin:16px 0;border:none;border-top:1px solid var(--color-border);">
+          <p class="text-muted" style="font-size:0.8rem;text-align:center;">This is a computer-generated receipt.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

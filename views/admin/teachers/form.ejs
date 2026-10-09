@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle aria-label="Toggle menu">☰</button>
+          <div style="font-weight:600;"><%= title %></div>
+        </div>
+        <a href="/admin/teachers" class="btn btn-outline btn-sm">Back</a>
+      </header>
+      <div class="page-content">
+        <% if (typeof error !== 'undefined' && error) { %><div class="alert alert-danger"><%= error %></div><% } %>
+        <div class="card" style="max-width:720px;">
+          <form method="POST" action="<%= mode === 'create' ? '/admin/teachers' : '/admin/teachers/' + teacher.id %>" novalidate>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="flex gap-4" style="flex-wrap:wrap;">
+              <div class="form-group" style="flex:1;min-width:200px;">
+                <label class="form-label" for="first_name">First name</label>
+                <input type="text" id="first_name" name="first_name" class="form-control" required
+                       value="<%= teacher && (teacher.first_name || teacher.firstName) ? (teacher.first_name || teacher.firstName) : '' %>">
+              </div>
+              <div class="form-group" style="flex:1;min-width:200px;">
+                <label class="form-label" for="last_name">Last name</label>
+                <input type="text" id="last_name" name="last_name" class="form-control" required
+                       value="<%= teacher && (teacher.last_name || teacher.lastName) ? (teacher.last_name || teacher.lastName) : '' %>">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="middle_name">Middle name</label>
+              <input type="text" id="middle_name" name="middle_name" class="form-control"
+                     value="<%= teacher && (teacher.middle_name || '') %>">
+            </div>
+            <div class="flex gap-4" style="flex-wrap:wrap;">
+              <div class="form-group" style="flex:1;min-width:160px;">
+                <label class="form-label" for="staff_id">Staff ID</label>
+                <input type="text" id="staff_id" name="staff_id" class="form-control" required
+                       value="<%= teacher && (teacher.staff_id || teacher.staffId) ? (teacher.staff_id || teacher.staffId) : '' %>">
+              </div>
+              <div class="form-group" style="flex:1;min-width:200px;">
+                <label class="form-label" for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" required
+                       value="<%= teacher && teacher.email ? teacher.email : '' %>">
+              </div>
+            </div>
+            <div class="flex gap-4" style="flex-wrap:wrap;">
+              <div class="form-group" style="flex:1;min-width:160px;">
+                <label class="form-label" for="phone">Phone</label>
+                <input type="text" id="phone" name="phone" class="form-control" value="<%= teacher && teacher.phone ? teacher.phone : '' %>">
+              </div>
+              <div class="form-group" style="flex:1;min-width:160px;">
+                <label class="form-label" for="department_id">Department</label>
+                <select id="department_id" name="department_id" class="form-control">
+                  <option value="">—</option>
+                  <% departments.forEach(function(d) { %>
+                    <option value="<%= d.id %>" <%= teacher && String(teacher.department_id) === String(d.id) ? 'selected' : '' %>><%= d.name %></option>
+                  <% }) %>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="qualification">Qualification</label>
+              <input type="text" id="qualification" name="qualification" class="form-control"
+                     value="<%= teacher && teacher.qualification ? teacher.qualification : '' %>">
+            </div>
+            <div class="flex gap-4" style="flex-wrap:wrap;">
+              <div class="form-group" style="flex:1;min-width:160px;">
+                <label class="form-label" for="employment_date">Employment date</label>
+                <input type="date" id="employment_date" name="employment_date" class="form-control"
+                       value="<%= teacher && teacher.employment_date ? String(teacher.employment_date).slice(0,10) : '' %>">
+              </div>
+              <div class="form-group" style="flex:1;min-width:160px;">
+                <label class="form-label" for="employment_type">Employment type</label>
+                <input type="text" id="employment_type" name="employment_type" class="form-control"
+                       placeholder="Full-time / Part-time"
+                       value="<%= teacher && teacher.employment_type ? teacher.employment_type : '' %>">
+              </div>
+            </div>
+            <% if (mode === 'create') { %>
+            <div class="form-group">
+              <label class="form-label" for="password">Password (optional)</label>
+              <input type="password" id="password" name="password" class="form-control" minlength="8" autocomplete="new-password"
+                     placeholder="Leave blank to auto-generate">
+            </div>
+            <% } %>
+            <div class="form-group">
+              <label class="form-label">Subjects taught</label>
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px;">
+                <% subjects.forEach(function(s) { %>
+                  <label style="display:flex;gap:6px;align-items:center;font-size:0.875rem;">
+                    <input type="checkbox" name="subject_ids" value="<%= s.id %>"
+                      <%= selectedSubjects.indexOf(s.id) !== -1 || selectedSubjects.indexOf(Number(s.id)) !== -1 ? 'checked' : '' %>>
+                    <%= s.name %>
+                  </label>
+                <% }) %>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Assigned classes</label>
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;">
+                <% classes.forEach(function(c) { %>
+                  <label style="display:flex;gap:6px;align-items:center;font-size:0.875rem;">
+                    <input type="checkbox" name="class_ids" value="<%= c.id %>"
+                      <%= selectedClasses.indexOf(c.id) !== -1 || selectedClasses.indexOf(Number(c.id)) !== -1 ? 'checked' : '' %>>
+                    <%= c.name %>
+                  </label>
+                <% }) %>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <button type="submit" class="btn btn-primary"><%= mode === 'create' ? 'Create teacher' : 'Save changes' %></button>
+              <a href="/admin/teachers" class="btn btn-outline">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

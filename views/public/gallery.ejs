@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery | Precious Star Heritage Academy</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/public.css">
+</head>
+<body class="public-body">
+  <%- include('../partials/public-navbar') %>
+
+  <section class="hero" style="padding:3rem 1.5rem;">
+    <h1>Gallery</h1>
+    <p>Moments from learning, sport, culture and community at PSHA.</p>
+  </section>
+
+  <section class="section">
+    <div class="gallery-grid">
+      <% images.forEach(function(img) { %>
+        <div class="gallery-item">
+          <div class="placeholder"><%= img.title %></div>
+          <div class="caption">
+            <strong><%= img.title %></strong>
+            <span><%= img.caption %></span>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+    <p class="text-muted" style="text-align:center;margin-top:2rem;font-size:0.875rem;">
+      Photo placeholders — replace with school media when available.
+    </p>
+  </section>
+
+  <%- include('../partials/public-footer') %>
+</body>
+</html>

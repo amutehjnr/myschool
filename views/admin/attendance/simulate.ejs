@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulate Event | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Simulate biometric event</div>
+        </div>
+        <a href="/admin/attendance/events" class="btn btn-outline btn-sm">Events</a>
+      </header>
+      <div class="page-content">
+        <div class="card" style="max-width:480px;">
+          <p class="text-muted mb-4">Use a seeded teacher staff ID (e.g. from teacher profile). This posts through the same ingest pipeline as devices.</p>
+          <form method="POST" action="/admin/attendance/simulate">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group">
+              <label class="form-label" for="device_code">Device code</label>
+              <select id="device_code" name="device_code" class="form-control">
+                <option value="">— none —</option>
+                <% devices.forEach(function(d) { %>
+                  <option value="<%= d.device_code %>"><%= d.device_code %> — <%= d.name %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="staff_id">Staff ID</label>
+              <input type="text" id="staff_id" name="staff_id" class="form-control" required placeholder="e.g. TCH-001">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="event_type">Event type</label>
+              <select id="event_type" name="event_type" class="form-control">
+                <option value="check_in">Check-in</option>
+                <option value="check_out">Check-out</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="event_timestamp">Timestamp (optional)</label>
+              <input type="datetime-local" id="event_timestamp" name="event_timestamp" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Ingest event</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

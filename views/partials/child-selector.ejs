@@ -1,0 +1,14 @@
+<% if (typeof children !== 'undefined' && children && children.length > 1) { %>
+  <div class="card mb-4" style="padding:12px 16px;">
+    <form method="GET" class="flex gap-2 items-center" style="flex-wrap:wrap;">
+      <label class="form-label" style="margin:0;" for="child">Viewing:</label>
+      <select name="child" id="child" class="form-control" style="width:auto;min-width:200px;" onchange="this.form.submit()">
+        <% children.forEach(function(c) { %>
+          <option value="<%= c.id %>" <%= selectedChild && Number(selectedChild.id) === Number(c.id) ? 'selected' : '' %>>
+            <%= c.first_name %> <%= c.last_name %> (<%= c.student_id %>)
+          </option>
+        <% }) %>
+      </select>
+    </form>
+  </div>
+<% } %>

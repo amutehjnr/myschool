@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/student-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">My Profile</div>
+        </div>
+        <a href="/auth/change-password" class="btn btn-outline btn-sm">Change password</a>
+      </header>
+      <div class="page-content">
+        <div class="card" style="max-width:520px;">
+          <h1 style="font-size:1.25rem;font-weight:600;"><%= student.first_name %> <%= student.last_name %></h1>
+          <p class="text-muted mb-4"><%= student.student_id %></p>
+          <p><strong>Class:</strong> <%= student.class_name || '—' %></p>
+          <p class="mt-2"><strong>House:</strong> <%= student.house_name || '—' %></p>
+          <p class="mt-2"><strong>Email:</strong> <%= student.email || '—' %></p>
+          <p class="mt-2"><strong>Gender:</strong> <%= student.gender || '—' %></p>
+          <p class="mt-2"><strong>Date of birth:</strong> <%= student.date_of_birth ? formatDate(student.date_of_birth) : '—' %></p>
+          <p class="mt-2"><strong>Status:</strong> <span class="badge <%= statusBadgeClass(student.status) %>"><%= student.status %></span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Announcements | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/teacher-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Announcements</div>
+        </div>
+        <a href="/notifications" class="btn btn-outline btn-sm">Notifications</a>
+      </header>
+      <div class="page-content">
+        <% if (!announcements.length) { %>
+          <div class="card"><p class="text-muted">No announcements.</p></div>
+        <% } else { announcements.forEach(function(a) { %>
+          <div class="card mb-4">
+            <div class="flex justify-between items-center" style="flex-wrap:wrap;gap:8px;">
+              <h2 style="font-size:1.1rem;font-weight:600;"><%= a.title %></h2>
+              <span class="badge <%= a.priority === 'emergency' ? 'badge-danger' : a.priority === 'important' ? 'badge-warning' : 'badge-info' %>"><%= a.priority %></span>
+            </div>
+            <p class="text-muted" style="font-size:0.8rem;margin:4px 0 12px;"><%= a.published_at ? formatDate(a.published_at) : '' %></p>
+            <div style="white-space:pre-wrap;"><%= a.body %></div>
+          </div>
+        <% }) } %>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

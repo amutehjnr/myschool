@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Classes | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/teacher-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">My Classes</div>
+        </div>
+      </header>
+      <div class="page-content">
+        <div class="stats-grid">
+          <% if (!classes.length) { %>
+            <div class="card"><p class="text-muted">No classes assigned yet.</p></div>
+          <% } else { classes.forEach(function(c) { %>
+            <div class="stat-card">
+              <div class="label"><%= c.level || 'Class' %></div>
+              <div class="value" style="font-size:1.25rem;"><%= c.name %></div>
+              <% if (c.is_class_teacher) { %><div class="context">You are class teacher</div><% } %>
+            </div>
+          <% }) } %>
+        </div>
+        <div class="card mt-4">
+          <h2 class="card-title mb-2">Subjects you teach</h2>
+          <% if (!subjects.length) { %><p class="text-muted">None assigned.</p>
+          <% } else { %>
+            <div class="flex gap-2" style="flex-wrap:wrap;">
+              <% subjects.forEach(function(s) { %><span class="badge badge-info"><%= s.name %></span><% }) %>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

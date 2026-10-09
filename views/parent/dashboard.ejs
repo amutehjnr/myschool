@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parent Dashboard | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/parent-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div>
+            <div style="font-weight:600;">Dashboard</div>
+            <div class="text-muted" style="font-size:0.75rem;">
+              Welcome, <%= parent.first_name %> <%= parent.last_name %>
+              <% if (typeof unreadNotifications !== 'undefined' && unreadNotifications) { %>
+                · <a href="/notifications"><%= unreadNotifications %> unread notification<%= unreadNotifications === 1 ? '' : 's' %></a>
+              <% } %>
+            </div>
+          </div>
+        </div>
+        <a href="/parent/profile" class="btn btn-outline btn-sm">Profile</a>
+      </header>
+      <div class="page-content">
+        <% if (typeof flash !== 'undefined' && flash) { %>
+          <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" data-auto-dismiss><%= flash.message %></div>
+        <% } %>
+
+        <% if (!children.length) { %>
+          <div class="card">
+            <h2 class="card-title mb-2">No children linked</h2>
+            <p class="text-muted">
+              Your parent account is active, but no students are linked yet.
+              Please contact the school office so they can link your children to this account.
+            </p>
+            <div class="mt-4 flex gap-2" style="flex-wrap:wrap;">
+              <a href="/contact" class="btn btn-primary btn-sm">Contact school</a>
+              <a href="/parent/profile" class="btn btn-outline btn-sm">View profile</a>
+            </div>
+          </div>
+        <% } else { %>
+          <%- include('../partials/child-selector') %>
+
+          <% if (selectedChild) { %>
+            <!-- Summary cards -->
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="label">Student</div>
+                <div class="value" style="font-size:1.1rem;"><%= selectedChild.first_name %> <%= selectedChild.last_name %></div>
+                <div class="context"><%= selectedChild.student_id %> · <%= selectedChild.class_name || '—' %></div>
+              </div>
+              <div class="stat-card">
+                <div class="label">Attendance (30 days)</div>
+                <div class="value" style="font-size:1.25rem;">
+                  <% if (attendanceStats && attendanceStats.rate != null) { %>
+                    <%= attendanceStats.rate %>%
+                  <% } else { %>—<% } %>
+                </div>
+                <div class="context">
+                  <% if (attendanceStats) { %>
+                    P <%= attendanceStats.present %> · A <%= attendanceStats.absent %> · L <%= attendanceStats.late %>
+                  <% } else { %>No records<% } %>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="label">Fees outstanding</div>
+                <div class="value" style="font-size:1.25rem;">
+                  ₦<%= feesSummary ? Number(feesSummary.outstanding).toLocaleString() : '0' %>
+                </div>
+                <div class="context">
+                  <%= feesSummary ? feesSummary.openCount : 0 %> open bill<%= feesSummary && feesSummary.openCount === 1 ? '' : 's' %>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="label">Published results</div>
+                <div class="value" style="font-size:1.25rem;"><%= resultsSummary ? resultsSummary.count : 0 %></div>
+                <div class="context">View report card for details</div>
+              </div>
+            </div>
+
+            <!-- Quick actions -->
+            <div class="card mb-4">
+              <h2 class="card-title mb-2">Quick actions</h2>
+              <div class="flex gap-2" style="flex-wrap:wrap;">
+                <a href="/parent/attendance" class="btn btn-outline btn-sm">Attendance</a>
+                <a href="/parent/results" class="btn btn-outline btn-sm">Results</a>
+                <a href="/parent/fees" class="btn btn-outline btn-sm">Fees</a>
+                <a href="/parent/children/<%= selectedChild.id %>" class="btn btn-outline btn-sm">Child profile</a>
+                <a href="/parent/announcements" class="btn btn-outline btn-sm">Announcements</a>
+                <a href="/parent/events" class="btn btn-outline btn-sm">Events</a>
+                <a href="/notifications" class="btn btn-outline btn-sm">Notifications<% if (unreadNotifications) { %> (<%= unreadNotifications %>)<% } %></a>
+              </div>
+            </div>
+
+            <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+              <!-- Attendance -->
+              <div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">Recent attendance</h2>
+                  <a href="/parent/attendance" class="btn btn-outline btn-sm">All</a>
+                </div>
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead><tr><th>Date</th><th>Status</th></tr></thead>
+                    <tbody>
+                      <% if (!attendance.length) { %>
+                        <tr><td colspan="2" class="text-center text-muted">No records yet.</td></tr>
+                      <% } else { attendance.slice(0, 8).forEach(function(a) { %>
+                        <tr>
+                          <td><%= formatDate(a.attendance_date) %></td>
+                          <td><span class="badge <%= statusBadgeClass(a.status) %>"><%= a.status %></span></td>
+                        </tr>
+                      <% }) } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Results -->
+              <div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">Recent results</h2>
+                  <a href="/parent/results" class="btn btn-outline btn-sm">All</a>
+                </div>
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead><tr><th>Subject</th><th>Score</th><th>Grade</th></tr></thead>
+                    <tbody>
+                      <% if (!resultsSummary || !resultsSummary.recent.length) { %>
+                        <tr><td colspan="3" class="text-center text-muted">No published results.</td></tr>
+                      <% } else { resultsSummary.recent.forEach(function(r) { %>
+                        <tr>
+                          <td><%= r.subject_name %></td>
+                          <td><%= r.total_score != null ? r.total_score : '—' %></td>
+                          <td><strong><%= r.grade || '—' %></strong></td>
+                        </tr>
+                      <% }) } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Fees -->
+              <div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">Fee bills</h2>
+                  <a href="/parent/fees" class="btn btn-outline btn-sm">All</a>
+                </div>
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead><tr><th>Fee</th><th>Balance</th><th>Status</th></tr></thead>
+                    <tbody>
+                      <% if (!feesSummary || !feesSummary.recent.length) { %>
+                        <tr><td colspan="3" class="text-center text-muted">No fee bills.</td></tr>
+                      <% } else { feesSummary.recent.forEach(function(f) {
+                        var bal = Number(f.amount_due) - Number(f.amount_paid);
+                      %>
+                        <tr>
+                          <td><%= f.fee_name %></td>
+                          <td>₦<%= bal.toLocaleString() %></td>
+                          <td><span class="badge <%= statusBadgeClass(f.status) %>"><%= f.status %></span></td>
+                        </tr>
+                      <% }) } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Announcements -->
+              <div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">Announcements</h2>
+                  <a href="/parent/announcements" class="btn btn-outline btn-sm">All</a>
+                </div>
+                <% if (!announcements || !announcements.length) { %>
+                  <p class="text-muted">No announcements.</p>
+                <% } else { announcements.forEach(function(a) { %>
+                  <div style="padding:10px 0;border-bottom:1px solid var(--color-border);">
+                    <div class="flex justify-between items-center" style="gap:8px;flex-wrap:wrap;">
+                      <strong style="font-size:0.9rem;"><%= a.title %></strong>
+                      <span class="badge <%= a.priority === 'emergency' ? 'badge-danger' : a.priority === 'important' ? 'badge-warning' : 'badge-info' %>"><%= a.priority %></span>
+                    </div>
+                    <p class="text-muted" style="font-size:0.8rem;margin-top:4px;"><%= a.published_at ? formatDate(a.published_at) : '' %></p>
+                  </div>
+                <% }) } %>
+              </div>
+
+              <!-- Events -->
+              <div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">Upcoming events</h2>
+                  <a href="/parent/events" class="btn btn-outline btn-sm">All</a>
+                </div>
+                <% if (!events || !events.length) { %>
+                  <p class="text-muted">No upcoming events.</p>
+                <% } else { %>
+                  <ul style="list-style:none;padding:0;margin:0;">
+                    <% events.forEach(function(e) { %>
+                      <li style="padding:10px 0;border-bottom:1px solid var(--color-border);">
+                        <strong style="font-size:0.9rem;"><%= e.title %></strong>
+                        <div class="text-muted" style="font-size:0.8rem;margin-top:2px;">
+                          <%= formatDate(e.event_date) %><% if (e.start_time) { %> · <%= e.start_time %><% } %><% if (e.location) { %> · <%= e.location %><% } %>
+                        </div>
+                      </li>
+                    <% }) %>
+                  </ul>
+                <% } %>
+              </div>
+
+              <!-- All children snapshot -->
+              <% if (children.length > 1) { %>
+              <div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">My children</h2>
+                  <a href="/parent/children" class="btn btn-outline btn-sm">Manage</a>
+                </div>
+                <ul style="list-style:none;padding:0;margin:0;">
+                  <% children.forEach(function(c) { %>
+                    <li style="padding:8px 0;border-bottom:1px solid var(--color-border);">
+                      <a href="/parent/dashboard?child=<%= c.id %>">
+                        <%= c.first_name %> <%= c.last_name %>
+                      </a>
+                      <span class="text-muted" style="font-size:0.8rem;"> · <%= c.class_name || '—' %> · <%= c.student_id %></span>
+                    </li>
+                  <% }) %>
+                </ul>
+              </div>
+              <% } %>
+            </div>
+          <% } %>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

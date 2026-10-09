@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teachers | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle aria-label="Toggle menu">☰</button>
+          <div style="font-weight:600;">Teachers</div>
+        </div>
+        <a href="/admin/teachers/new" class="btn btn-primary btn-sm">Add Teacher</a>
+      </header>
+      <div class="page-content">
+        <% if (typeof flash !== 'undefined' && flash) { %>
+          <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" data-auto-dismiss><%= flash.message %></div>
+        <% } %>
+        <div class="card mb-4">
+          <form method="GET" action="/admin/teachers" class="flex gap-2" style="flex-wrap:wrap;align-items:flex-end;">
+            <div class="form-group" style="margin:0;flex:1;min-width:160px;">
+              <label class="form-label" for="search">Search</label>
+              <input type="search" name="search" id="search" class="form-control" placeholder="Name, staff ID, email…" value="<%= filters.search %>">
+            </div>
+            <div class="form-group" style="margin:0;min-width:140px;">
+              <label class="form-label" for="department_id">Department</label>
+              <select name="department_id" id="department_id" class="form-control">
+                <option value="">All</option>
+                <% departments.forEach(function(d) { %>
+                  <option value="<%= d.id %>" <%= String(filters.department_id) === String(d.id) ? 'selected' : '' %>><%= d.name %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0;min-width:120px;">
+              <label class="form-label" for="status">Status</label>
+              <select name="status" id="status" class="form-control">
+                <option value="">All</option>
+                <option value="active" <%= filters.status === 'active' ? 'selected' : '' %>>Active</option>
+                <option value="inactive" <%= filters.status === 'inactive' ? 'selected' : '' %>>Inactive</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-outline btn-sm">Filter</button>
+          </form>
+        </div>
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Staff ID</th>
+                  <th>Name</th>
+                  <th>Department</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (!teachers.length) { %>
+                  <tr><td colspan="7" class="text-center text-muted">No teachers found.</td></tr>
+                <% } %>
+                <% teachers.forEach(function(t) { %>
+                  <tr>
+                    <td><%= t.staff_id %></td>
+                    <td><a href="/admin/teachers/<%= t.id %>"><%= t.first_name %> <%= t.last_name %></a></td>
+                    <td><%= t.department_name || '—' %></td>
+                    <td><%= t.email %></td>
+                    <td><%= t.phone || '—' %></td>
+                    <td>
+                      <% if (t.is_active) { %><span class="badge badge-success">Active</span>
+                      <% } else { %><span class="badge badge-danger">Inactive</span><% } %>
+                    </td>
+                    <td>
+                      <div class="flex gap-2" style="flex-wrap:wrap;">
+                        <a href="/admin/teachers/<%= t.id %>" class="btn btn-outline btn-sm">View</a>
+                        <a href="/admin/teachers/<%= t.id %>/edit" class="btn btn-outline btn-sm">Edit</a>
+                        <% if (t.is_active) { %>
+                          <form method="POST" action="/admin/teachers/<%= t.id %>/deactivate" style="display:inline;">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <button type="submit" class="btn btn-outline btn-sm" onclick="return confirm('Deactivate this teacher?')">Deactivate</button>
+                          </form>
+                        <% } else { %>
+                          <form method="POST" action="/admin/teachers/<%= t.id %>/activate" style="display:inline;">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <button type="submit" class="btn btn-outline btn-sm">Activate</button>
+                          </form>
+                        <% } %>
+                      </div>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+          <% if (totalPages > 1) { %>
+            <div class="flex items-center justify-between mt-4">
+              <span class="text-muted" style="font-size:0.875rem;">Page <%= page %> of <%= totalPages %> (<%= total %> total)</span>
+              <div class="flex gap-2">
+                <% if (page > 1) { %><a class="btn btn-outline btn-sm" href="?page=<%= page-1 %>&search=<%= filters.search %>&department_id=<%= filters.department_id %>&status=<%= filters.status %>">Previous</a><% } %>
+                <% if (page < totalPages) { %><a class="btn btn-outline btn-sm" href="?page=<%= page+1 %>&search=<%= filters.search %>&department_id=<%= filters.department_id %>&status=<%= filters.status %>">Next</a><% } %>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

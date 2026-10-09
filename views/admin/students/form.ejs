@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;"><%= title %></div>
+        </div>
+        <a href="/admin/students" class="btn btn-outline btn-sm">Back</a>
+      </header>
+      <div class="page-content">
+        <% if (typeof error !== 'undefined' && error) { %><div class="alert alert-danger"><%= error %></div><% } %>
+        <div class="card" style="max-width:720px;">
+          <form method="POST" action="<%= mode === 'create' ? '/admin/students' : '/admin/students/' + student.id %>" novalidate>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="flex gap-4" style="flex-wrap:wrap;">
+              <div class="form-group" style="flex:1;min-width:200px;">
+                <label class="form-label" for="first_name">First name</label>
+                <input type="text" id="first_name" name="first_name" class="form-control" required value="<%= student && student.first_name ? student.first_name : '' %>">
+              </div>
+              <div class="form-group" style="flex:1;min-width:200px;">
+                <label class="form-label" for="last_name">Last name</label>
+                <input type="text" id="last_name" name="last_name" class="form-control" required value="<%= student && student.last_name ? student.last_name : '' %>">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="middle_name">Middle name</label>
+              <input type="text" id="middle_name" name="middle_name" class="form-control" value="<%= student && student.middle_name ? student.middle_name : '' %>">
+            </div>
+            <div class="flex gap-4" style="flex-wrap:wrap;">
+              <div class="form-group" style="flex:1;min-width:160px;">
+                <label class="form-label" for="student_id">Student ID</label>
+                <input type="text" id="student_id" name="student_id" class="form-control" required value="<%= student && student.student_id ? student.student_id : '' %>">
+              </div>
+              <div class="form-group" style="flex:1;min-width:140px;">
+                <label class="form-label" for="gender">Gender</label>
+                <select id="gender" name="gender" class="form-control">
+                  <option value="">—</option>
+                  <option value="male" <%= student && student.gender === 'male' ? 'selected' : '' %>>Male</option>
+                  <option value="female" <%= student && student.gender === 'female' ? 'selected' : '' %>>Female</option>
+                  <option value="other" <%= student && student.gender === 'other' ? 'selected' : '' %>>Other</option>
+                </select>
+              </div>
+              <div class="form-group" style="flex:1;min-width:160px;">
+                <label class="form-label" for="date_of_birth">Date of birth</label>
+                <input type="date" id="date_of_birth" name="date_of_birth" class="form-control" value="<%= student && student.date_of_birth ? String(student.date_of_birth).slice(0,10) : '' %>">
+              </div>
+            </div>
+            <div class="flex gap-4" style="flex-wrap:wrap;">
+              <div class="form-group" style="flex:1;min-width:140px;">
+                <label class="form-label" for="class_id">Class</label>
+                <select id="class_id" name="class_id" class="form-control">
+                  <option value="">—</option>
+                  <% classes.forEach(function(c) { %>
+                    <option value="<%= c.id %>" <%= student && String(student.class_id) === String(c.id) ? 'selected' : '' %>><%= c.name %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="form-group" style="flex:1;min-width:140px;">
+                <label class="form-label" for="house_id">House</label>
+                <select id="house_id" name="house_id" class="form-control">
+                  <option value="">—</option>
+                  <% houses.forEach(function(h) { %>
+                    <option value="<%= h.id %>" <%= student && String(student.house_id) === String(h.id) ? 'selected' : '' %>><%= h.name %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="form-group" style="flex:1;min-width:140px;">
+                <label class="form-label" for="academic_session_id">Session</label>
+                <select id="academic_session_id" name="academic_session_id" class="form-control">
+                  <option value="">Current</option>
+                  <% sessions.forEach(function(s) { %>
+                    <option value="<%= s.id %>" <%= student && String(student.academic_session_id) === String(s.id) ? 'selected' : '' %>><%= s.name %></option>
+                  <% }) %>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="admission_date">Admission date</label>
+              <input type="date" id="admission_date" name="admission_date" class="form-control" value="<%= student && student.admission_date ? String(student.admission_date).slice(0,10) : '' %>">
+            </div>
+            <% if (mode === 'edit') { %>
+            <div class="form-group">
+              <label class="form-label" for="status">Status</label>
+              <select id="status" name="status" class="form-control">
+                <option value="active" <%= student.status === 'active' ? 'selected' : '' %>>Active</option>
+                <option value="suspended" <%= student.status === 'suspended' ? 'selected' : '' %>>Suspended</option>
+                <option value="withdrawn" <%= student.status === 'withdrawn' ? 'selected' : '' %>>Withdrawn</option>
+                <option value="graduated" <%= student.status === 'graduated' ? 'selected' : '' %>>Graduated</option>
+              </select>
+            </div>
+            <% } %>
+            <% if (mode === 'create') { %>
+            <div class="form-group">
+              <label style="display:flex;gap:8px;align-items:center;">
+                <input type="checkbox" name="create_login" value="1" id="create_login">
+                Create portal login for this student
+              </label>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="email">Email (if creating login)</label>
+              <input type="email" id="email" name="email" class="form-control" value="<%= student && student.email ? student.email : '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="password">Password (optional)</label>
+              <input type="password" id="password" name="password" class="form-control" minlength="8" autocomplete="new-password" placeholder="Auto-generate if blank">
+            </div>
+            <% } else if (student && student.email) { %>
+            <div class="form-group">
+              <label class="form-label" for="email">Portal email</label>
+              <input type="email" id="email" name="email" class="form-control" value="<%= student.email %>">
+            </div>
+            <% } %>
+            <div class="flex gap-2">
+              <button type="submit" class="btn btn-primary"><%= mode === 'create' ? 'Create student' : 'Save changes' %></button>
+              <a href="/admin/students" class="btn btn-outline">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

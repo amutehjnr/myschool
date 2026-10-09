@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Link a child | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/parent-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Link a child</div>
+        </div>
+        <a href="/parent/children" class="btn btn-outline btn-sm">Back</a>
+      </header>
+      <div class="page-content">
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+        <div class="card" style="max-width:480px;">
+          <p class="text-muted mb-4">
+            Enter your child’s <strong>Student ID</strong> and <strong>date of birth</strong> exactly as registered with the school.
+            This verifies you are authorised to view their records.
+          </p>
+          <form method="POST" action="/parent/children/link" novalidate>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group">
+              <label class="form-label" for="student_id">Student ID</label>
+              <input type="text" id="student_id" name="student_id" class="form-control" required
+                     placeholder="e.g. STU-2025-001"
+                     value="<%= form && form.student_id ? form.student_id : '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="date_of_birth">Date of birth</label>
+              <input type="date" id="date_of_birth" name="date_of_birth" class="form-control" required
+                     value="<%= form && form.date_of_birth ? form.date_of_birth : '' %>">
+            </div>
+            <button type="submit" class="btn btn-primary">Link child</button>
+            <a href="/parent/children" class="btn btn-outline">Cancel</a>
+          </form>
+          <p class="text-muted mt-4" style="font-size:0.85rem;">
+            If linking fails, contact the school office — they can also link your account from the admin portal.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

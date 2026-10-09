@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Device | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Register device</div>
+        </div>
+        <a href="/admin/attendance/devices" class="btn btn-outline btn-sm">Back</a>
+      </header>
+      <div class="page-content">
+        <% if (typeof error !== 'undefined' && error) { %><div class="alert alert-danger"><%= error %></div><% } %>
+        <div class="card" style="max-width:480px;">
+          <form method="POST" action="/admin/attendance/devices">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group">
+              <label class="form-label" for="device_code">Device code</label>
+              <input type="text" id="device_code" name="device_code" class="form-control" required placeholder="e.g. GATE-01">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="name">Name</label>
+              <input type="text" id="name" name="name" class="form-control" required placeholder="Main gate biometric">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="location">Location</label>
+              <input type="text" id="location" name="location" class="form-control">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="device_type">Type</label>
+              <select id="device_type" name="device_type" class="form-control">
+                <option value="biometric">Biometric</option>
+                <option value="rfid">RFID</option>
+                <option value="manual">Manual terminal</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

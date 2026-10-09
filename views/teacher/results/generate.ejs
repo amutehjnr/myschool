@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate Results | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/teacher-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Generate Results</div>
+        </div>
+        <a href="/teacher/results" class="btn btn-outline btn-sm">Back</a>
+      </header>
+      <div class="page-content">
+        <% if (typeof error !== 'undefined' && error) { %><div class="alert alert-danger"><%= error %></div><% } %>
+        <div class="card" style="max-width:480px;">
+          <p class="text-muted mb-4">Calculate term subject results from assessment scores (weighted if weights are set).</p>
+          <form method="POST" action="/teacher/results/generate">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group">
+              <label class="form-label" for="class_id">Class</label>
+              <select id="class_id" name="class_id" class="form-control" required>
+                <option value="">—</option>
+                <% classes.forEach(function(c) { %>
+                  <option value="<%= c.id %>"><%= c.name %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="subject_id">Subject</label>
+              <select id="subject_id" name="subject_id" class="form-control" required>
+                <option value="">—</option>
+                <% subjects.forEach(function(s) { %>
+                  <option value="<%= s.id %>"><%= s.name %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="term_id">Term</label>
+              <select id="term_id" name="term_id" class="form-control" required>
+                <% terms.forEach(function(t) { %>
+                  <option value="<%= t.id %>" <%= t.is_current ? 'selected' : '' %>><%= t.name %> (<%= t.session_name %>)</option>
+                <% }) %>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Generate</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

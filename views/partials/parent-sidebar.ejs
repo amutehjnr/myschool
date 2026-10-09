@@ -1,0 +1,18 @@
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="mark">PS</div>
+    <div><div class="name">PSHA</div><div class="descriptor">Parent Portal</div></div>
+  </div>
+  <ul class="sidebar-nav">
+    <li><a href="/parent/dashboard" class="<%= typeof path !== 'undefined' && path.indexOf('/parent/dashboard') === 0 ? 'active' : '' %>">Dashboard</a></li>
+    <li><a href="/parent/children" class="<%= typeof path !== 'undefined' && path.indexOf('/parent/children') === 0 ? 'active' : '' %>">My Children</a></li>
+    <li><a href="/parent/attendance" class="<%= typeof path !== 'undefined' && path.indexOf('/parent/attendance') === 0 ? 'active' : '' %>">Attendance</a></li>
+    <li><a href="/parent/results" class="<%= typeof path !== 'undefined' && path.indexOf('/parent/results') === 0 ? 'active' : '' %>">Results</a></li>
+    <li><a href="/parent/fees" class="<%= typeof path !== 'undefined' && path.indexOf('/parent/fees') === 0 ? 'active' : '' %>">Fees</a></li>
+    <li><a href="/parent/announcements" class="<%= typeof path !== 'undefined' && path.indexOf('/parent/announcements') === 0 ? 'active' : '' %>">Announcements</a></li>
+    <li><a href="/parent/events" class="<%= typeof path !== 'undefined' && path.indexOf('/parent/events') === 0 ? 'active' : '' %>">Events</a></li>
+    <li><a href="/notifications" class="<%= typeof path !== 'undefined' && path.indexOf('/notifications') === 0 ? 'active' : '' %>">Notifications</a></li>
+    <li><a href="/parent/profile" class="<%= typeof path !== 'undefined' && path.indexOf('/parent/profile') === 0 ? 'active' : '' %>">Profile</a></li>
+  </ul>
+  <div class="sidebar-footer"><a href="/auth/logout">Log out</a></div>
+</aside>

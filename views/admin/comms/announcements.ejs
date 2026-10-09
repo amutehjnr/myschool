@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Announcements | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Announcements</div>
+        </div>
+        <a href="/admin/announcements/new" class="btn btn-primary btn-sm">New announcement</a>
+      </header>
+      <div class="page-content">
+        <% if (typeof flash !== 'undefined' && flash) { %>
+          <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" data-auto-dismiss><%= flash.message %></div>
+        <% } %>
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr><th>Title</th><th>Audience</th><th>Priority</th><th>Status</th><th>Published</th><th></th></tr>
+              </thead>
+              <tbody>
+                <% if (!announcements.length) { %>
+                  <tr><td colspan="6" class="text-center text-muted">No announcements yet.</td></tr>
+                <% } %>
+                <% announcements.forEach(function(a) { %>
+                  <tr>
+                    <td><%= a.title %></td>
+                    <td><%= a.audience %><% if (a.class_name) { %> (<%= a.class_name %>)<% } %></td>
+                    <td><span class="badge <%= a.priority === 'emergency' ? 'badge-danger' : a.priority === 'important' ? 'badge-warning' : 'badge-secondary' %>"><%= a.priority %></span></td>
+                    <td><span class="badge <%= a.is_published ? 'badge-success' : 'badge-secondary' %>"><%= a.is_published ? 'Published' : 'Draft' %></span></td>
+                    <td class="text-muted"><%= a.published_at ? formatDate(a.published_at) : '—' %></td>
+                    <td>
+                      <% if (!a.is_published) { %>
+                        <form method="POST" action="/admin/announcements/<%= a.id %>/publish" style="display:inline;">
+                          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                          <button type="submit" class="btn btn-outline btn-sm">Publish</button>
+                        </form>
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

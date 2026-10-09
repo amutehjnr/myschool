@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/parent-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Child profile</div>
+        </div>
+        <a href="/parent/children" class="btn btn-outline btn-sm">All children</a>
+      </header>
+      <div class="page-content">
+        <%- include('../partials/child-selector') %>
+        <% if (selectedChild) { %>
+          <div class="card" style="max-width:520px;">
+            <h1 style="font-size:1.25rem;font-weight:600;"><%= selectedChild.first_name %> <%= selectedChild.last_name %></h1>
+            <p class="text-muted mb-4"><%= selectedChild.student_id %></p>
+            <p><strong>Class:</strong> <%= selectedChild.class_name || '—' %></p>
+            <p class="mt-2"><strong>House:</strong> <%= selectedChild.house_name || '—' %></p>
+            <p class="mt-2"><strong>Status:</strong> <span class="badge <%= statusBadgeClass(selectedChild.status) %>"><%= selectedChild.status %></span></p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

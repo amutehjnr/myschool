@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review Application | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/public.css">
+</head>
+<body class="public-body">
+  <%- include('../partials/public-navbar') %>
+  <section class="section">
+    <h1 class="section-title">Review your application</h1>
+    <% if (typeof flash !== 'undefined' && flash) { %>
+      <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" style="max-width:640px;margin:0 auto 16px;"><%= flash.message %></div>
+    <% } %>
+    <div class="card" style="max-width:640px;margin:0 auto;">
+      <p><strong>Reference:</strong> <%= application.reference_number %></p>
+      <p class="mt-2"><strong>Applicant:</strong> <%= application.applicant_first_name %> <%= application.applicant_last_name %></p>
+      <p class="mt-2"><strong>Class applied for:</strong> <%= application.applying_for_class || '—' %></p>
+      <p class="mt-2"><strong>Parent:</strong> <%= application.parent_first_name || '' %> <%= application.parent_last_name || '' %></p>
+      <p class="mt-2"><strong>Parent contact:</strong> <%= application.parent_email || application.parent_phone || '—' %></p>
+      <p class="mt-2"><strong>Documents:</strong> <%= application.documents ? application.documents.length : 0 %> file(s)</p>
+
+      <% if (['draft','additional_info_required'].indexOf(application.status) !== -1) { %>
+        <form method="POST" action="/admissions/application/<%= application.id %>/submit" class="mt-4">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <button type="submit" class="btn btn-primary" onclick="return confirm('Submit this application? You may not be able to edit after submission.')">Submit application</button>
+          <a href="/admissions/application/<%= application.id %>/documents" class="btn btn-outline">Back to documents</a>
+        </form>
+      <% } else { %>
+        <p class="mt-4"><span class="badge <%= statusBadgeClass(application.status) %>"><%= application.status %></span></p>
+        <a href="/admissions/status?ref=<%= application.reference_number %>" class="btn btn-outline mt-2">Track status</a>
+      <% } %>
+    </div>
+  </section>
+  <%- include('../partials/public-footer') %>
+</body>
+</html>

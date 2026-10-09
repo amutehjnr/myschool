@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Bills | PSHA Admin</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../../partials/admin-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div style="font-weight:600;">Student bills</div>
+        </div>
+        <div class="flex gap-2">
+          <a href="/admin/fees/assign" class="btn btn-primary btn-sm">Assign fees</a>
+          <a href="/admin/fees" class="btn btn-outline btn-sm">Definitions</a>
+        </div>
+      </header>
+      <div class="page-content">
+        <% if (typeof flash !== 'undefined' && flash) { %>
+          <div class="alert alert-<%= flash.type === 'error' ? 'danger' : flash.type %>" data-auto-dismiss><%= flash.message %></div>
+        <% } %>
+        <div class="card mb-4">
+          <form method="GET" class="flex gap-2" style="flex-wrap:wrap;align-items:flex-end;">
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Class</label>
+              <select name="class_id" class="form-control">
+                <option value="">All</option>
+                <% classes.forEach(function(c) { %>
+                  <option value="<%= c.id %>" <%= String(filters.class_id)===String(c.id)?'selected':'' %>><%= c.name %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Status</label>
+              <select name="status" class="form-control">
+                <option value="">All</option>
+                <% ['outstanding','partially_paid','paid','waived'].forEach(function(s) { %>
+                  <option value="<%= s %>" <%= filters.status===s?'selected':'' %>><%= s %></option>
+                <% }) %>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-outline btn-sm">Filter</button>
+          </form>
+        </div>
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Fee</th>
+                  <th>Due</th>
+                  <th>Paid</th>
+                  <th>Balance</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (!bills.length) { %>
+                  <tr><td colspan="7" class="text-center text-muted">No bills found.</td></tr>
+                <% } %>
+                <% bills.forEach(function(b) {
+                  var bal = Number(b.amount_due) - Number(b.amount_paid);
+                %>
+                  <tr>
+                    <td><%= b.last_name %> <%= b.first_name %> <span class="text-muted">(<%= b.student_code %>)</span></td>
+                    <td><%= b.fee_name %></td>
+                    <td>₦<%= Number(b.amount_due).toLocaleString() %></td>
+                    <td>₦<%= Number(b.amount_paid).toLocaleString() %></td>
+                    <td>₦<%= bal.toLocaleString() %></td>
+                    <td><span class="badge <%= statusBadgeClass(b.status) %>"><%= b.status %></span></td>
+                    <td>
+                      <% if (b.status === 'outstanding' || b.status === 'partially_paid') { %>
+                        <a href="/admin/fees/bills/<%= b.id %>/pay" class="btn btn-outline btn-sm">Pay</a>
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

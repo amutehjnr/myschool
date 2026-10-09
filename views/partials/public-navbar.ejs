@@ -1,0 +1,28 @@
+<header class="public-navbar">
+  <a href="/" class="brand">
+    <span class="mark">PS</span>
+    <span>Precious Star Heritage Academy</span>
+  </a>
+  <button type="button" class="public-nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+  <nav>
+    <ul class="public-nav-links" id="navLinks">
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/admissions">Admissions</a></li>
+      <li><a href="/gallery">Gallery</a></li>
+      <li><a href="/contact">Contact</a></li>
+      <li><a href="/auth/login" class="btn btn-accent btn-sm">Portal Login</a></li>
+    </ul>
+  </nav>
+</header>
+<script>
+  (function () {
+    var btn = document.getElementById('navToggle');
+    var links = document.getElementById('navLinks');
+    if (btn && links) {
+      btn.addEventListener('click', function () {
+        links.classList.toggle('open');
+      });
+    }
+  })();
+</script>

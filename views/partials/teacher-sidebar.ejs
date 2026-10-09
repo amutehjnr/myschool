@@ -1,0 +1,25 @@
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="mark">PS</div>
+    <div>
+      <div class="name">PSHA</div>
+      <div class="descriptor">Teacher Portal</div>
+    </div>
+  </div>
+  <ul class="sidebar-nav">
+    <li><a href="/teacher/dashboard" class="<%= typeof path !== 'undefined' && path.indexOf('/teacher/dashboard') === 0 ? 'active' : '' %>">Dashboard</a></li>
+    <li><a href="/teacher/classes" class="<%= typeof path !== 'undefined' && path.indexOf('/teacher/classes') === 0 ? 'active' : '' %>">My Classes</a></li>
+    <li><a href="/teacher/assignments" class="<%= typeof path !== 'undefined' && path.indexOf('/teacher/assignments') === 0 ? 'active' : '' %>">Assignments</a></li>
+    <li><a href="/teacher/assessments" class="<%= typeof path !== 'undefined' && path.indexOf('/teacher/assessments') === 0 ? 'active' : '' %>">Assessments</a></li>
+    <li><a href="/teacher/timetable" class="<%= typeof path !== 'undefined' && path.indexOf('/teacher/timetable') === 0 ? 'active' : '' %>">Timetable</a></li>
+    <li><a href="/teacher/attendance" class="<%= typeof path !== 'undefined' && path.indexOf('/teacher/attendance') === 0 ? 'active' : '' %>">Attendance</a></li>
+    <li><a href="/teacher/results" class="<%= typeof path !== 'undefined' && path.indexOf('/teacher/results') === 0 ? 'active' : '' %>">Results</a></li>
+    <li><a href="/teacher/announcements" class="<%= typeof path !== 'undefined' && path.indexOf('/teacher/announcements') === 0 ? 'active' : '' %>">Announcements</a></li>
+    <li><a href="/teacher/events" class="<%= typeof path !== 'undefined' && path.indexOf('/teacher/events') === 0 ? 'active' : '' %>">Events</a></li>
+    <li><a href="/notifications" class="<%= typeof path !== 'undefined' && path.indexOf('/notifications') === 0 ? 'active' : '' %>">Notifications</a></li>
+    <li><a href="/teacher/profile" class="<%= typeof path !== 'undefined' && path.indexOf('/teacher/profile') === 0 ? 'active' : '' %>">Profile</a></li>
+  </ul>
+  <div class="sidebar-footer">
+    <a href="/auth/logout">Log out</a>
+  </div>
+</aside>

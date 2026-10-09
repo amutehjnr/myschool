@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Attendance | PSHA</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <%- include('../partials/teacher-sidebar') %>
+    <div class="main-content">
+      <header class="top-navbar">
+        <div class="flex items-center gap-4">
+          <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
+          <div>
+            <div style="font-weight:600;">My attendance</div>
+            <div class="text-muted" style="font-size:0.75rem;"><%= teacher.first_name %> <%= teacher.last_name %> · <%= teacher.staff_id %></div>
+          </div>
+        </div>
+        <a href="/teacher/attendance/mark" class="btn btn-primary btn-sm">Mark class</a>
+      </header>
+      <div class="page-content">
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr><th>Date</th><th>Check-in</th><th>Check-out</th><th>Minutes</th><th>Status</th><th>Source</th></tr>
+              </thead>
+              <tbody>
+                <% if (!records.length) { %>
+                  <tr><td colspan="6" class="text-center text-muted">No attendance records yet.</td></tr>
+                <% } %>
+                <% records.forEach(function(r) { %>
+                  <tr>
+                    <td><%= formatDate(r.attendance_date) %></td>
+                    <td><%= r.check_in_time ? formatDate(r.check_in_time) : '—' %></td>
+                    <td><%= r.check_out_time ? formatDate(r.check_out_time) : '—' %></td>
+                    <td><%= r.total_minutes != null ? r.total_minutes : '—' %></td>
+                    <td><span class="badge <%= statusBadgeClass(r.status) %>"><%= r.status %></span></td>
+                    <td><%= r.source %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>
