@@ -72,6 +72,8 @@ async function createTeacher(data, adminUserId, meta = {}) {
   });
 
   const teacherId = await teacherRepo.create({
+      photoPath: data.photoPath || null,
+      photoPublicId: data.photoPublicId || null,
     userId,
     staffId,
     firstName,
@@ -123,6 +125,8 @@ async function updateTeacher(id, data, adminUserId, meta = {}) {
   }
 
   await teacherRepo.update(id, {
+      photoPath: data.photoPath,
+      photoPublicId: data.photoPublicId,
     firstName: data.firstName,
     lastName: data.lastName,
     middleName: data.middleName,

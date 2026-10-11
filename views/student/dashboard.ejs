@@ -21,6 +21,16 @@
         </div>
       </header>
       <div class="page-content">
+        <% if (typeof student !== 'undefined' && student) { %>
+        <div class="card mb-4 flex items-center gap-4" style="padding:1rem 1.25rem;">
+          <%- include('../partials/passport', { photo: student.photo_path, name: (student.first_name||'') + ' ' + (student.last_name||''), size: 64 }) %>
+          <div>
+            <div style="font-weight:600;"><%= student.first_name %> <%= student.last_name %></div>
+            <div class="text-muted" style="font-size:0.85rem;"><%= student.student_id %> · <%= student.class_name || '' %></div>
+          </div>
+        </div>
+        <% } %>
+
         <div class="stats-grid">
           <div class="stat-card">
             <div class="label">Class</div>

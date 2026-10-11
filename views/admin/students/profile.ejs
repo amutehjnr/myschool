@@ -22,6 +22,10 @@
         </div>
       </header>
       <div class="page-content">
+        <div class="flex items-center gap-4 mb-4">
+          <%- include('../../partials/passport', { photo: student.photo_path, name: student.first_name + ' ' + student.last_name, size: 96 }) %>
+        </div>
+
         <div class="card mb-4">
           <div class="flex justify-between items-center" style="flex-wrap:wrap;gap:12px;">
             <div>

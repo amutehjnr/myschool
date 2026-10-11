@@ -93,6 +93,8 @@ async function adminCreate(req, res, next) {
       });
     }
 
+    const photoPath = req.file && (req.file.cloudinaryUrl || (req.file.cloudinary && req.file.cloudinary.url));
+    const photoPublicId = req.file && (req.file.cloudinaryPublicId || (req.file.cloudinary && req.file.cloudinary.publicId));
     const result = await teacherService.createTeacher(
       {
         email: req.body.email,
@@ -103,6 +105,8 @@ async function adminCreate(req, res, next) {
         departmentId: req.body.department_id ? Number(req.body.department_id) : null,
         qualification: req.body.qualification,
         phone: req.body.phone,
+        photoPath: photoPath || null,
+        photoPublicId: photoPublicId || null,
         employmentDate: req.body.employment_date || null,
         employmentType: req.body.employment_type,
         subjectIds: selectedSubjects,
@@ -215,6 +219,8 @@ async function adminUpdate(req, res, next) {
       });
     }
 
+    const photoPath = req.file && (req.file.cloudinaryUrl || (req.file.cloudinary && req.file.cloudinary.url));
+    const photoPublicId = req.file && (req.file.cloudinaryPublicId || (req.file.cloudinary && req.file.cloudinary.publicId));
     const result = await teacherService.updateTeacher(
       req.params.id,
       {
@@ -226,6 +232,8 @@ async function adminUpdate(req, res, next) {
         departmentId: req.body.department_id ? Number(req.body.department_id) : null,
         qualification: req.body.qualification,
         phone: req.body.phone,
+        photoPath: photoPath || null,
+        photoPublicId: photoPublicId || null,
         employmentDate: req.body.employment_date || null,
         employmentType: req.body.employment_type,
         subjectIds: selectedSubjects,

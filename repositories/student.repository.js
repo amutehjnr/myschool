@@ -108,6 +108,8 @@ async function create({
   middleName = null,
   dateOfBirth = null,
   gender = null,
+  photoPath = null,
+  photoPublicId = null,
   classId = null,
   houseId = null,
   academicSessionId = null,
@@ -116,10 +118,10 @@ async function create({
 }) {
   const result = await query(
     `INSERT INTO students
-       (user_id, student_id, first_name, last_name, middle_name, date_of_birth, gender,
+       (user_id, student_id, first_name, last_name, middle_name, date_of_birth, gender, photo_path, photo_public_id,
         class_id, house_id, academic_session_id, admission_date, status)
      VALUES
-       (:userId, :studentId, :firstName, :lastName, :middleName, :dateOfBirth, :gender,
+       (:userId, :studentId, :firstName, :lastName, :middleName, :dateOfBirth, :gender, :photoPath, :photoPublicId,
         :classId, :houseId, :academicSessionId, :admissionDate, :status)`,
     {
       userId,
@@ -129,6 +131,8 @@ async function create({
       middleName,
       dateOfBirth,
       gender,
+      photoPath,
+      photoPublicId,
       classId,
       houseId,
       academicSessionId,
@@ -154,7 +158,8 @@ async function update(id, data) {
     admission_date: 'admissionDate',
     status: 'status',
     student_id: 'studentId',
-    photo_path: 'photoPath'
+    photo_path: 'photoPath',
+    photo_public_id: 'photoPublicId'
   };
   for (const [col, key] of Object.entries(map)) {
     if (data[key] !== undefined) {

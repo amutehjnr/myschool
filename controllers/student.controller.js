@@ -85,6 +85,8 @@ async function adminCreate(req, res, next) {
       });
     }
 
+    const photoPath = req.file && (req.file.cloudinaryUrl || (req.file.cloudinary && req.file.cloudinary.url));
+    const photoPublicId = req.file && (req.file.cloudinaryPublicId || (req.file.cloudinary && req.file.cloudinary.publicId));
     const result = await studentService.createStudent(
       {
         email: req.body.email,
@@ -94,6 +96,8 @@ async function adminCreate(req, res, next) {
         middleName: req.body.middle_name,
         dateOfBirth: req.body.date_of_birth || null,
         gender: req.body.gender || null,
+        photoPath: photoPath || null,
+        photoPublicId: photoPublicId || null,
         classId: req.body.class_id ? Number(req.body.class_id) : null,
         houseId: req.body.house_id ? Number(req.body.house_id) : null,
         academicSessionId: req.body.academic_session_id
@@ -211,6 +215,8 @@ async function adminUpdate(req, res, next) {
         middleName: req.body.middle_name,
         dateOfBirth: req.body.date_of_birth || null,
         gender: req.body.gender || null,
+        photoPath: photoPath || undefined,
+        photoPublicId: photoPublicId || undefined,
         classId: req.body.class_id ? Number(req.body.class_id) : null,
         houseId: req.body.house_id ? Number(req.body.house_id) : null,
         academicSessionId: req.body.academic_session_id

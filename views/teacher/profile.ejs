@@ -19,6 +19,16 @@
         <a href="/auth/change-password" class="btn btn-outline btn-sm">Change password</a>
       </header>
       <div class="page-content">
+        <% if (typeof teacher !== 'undefined' && teacher) { %>
+        <div class="card mb-4 flex items-center gap-4" style="padding:1rem 1.25rem;">
+          <%- include('../partials/passport', { photo: teacher.photo_path, name: (teacher.first_name||'') + ' ' + (teacher.last_name||''), size: 64 }) %>
+          <div>
+            <div style="font-weight:600;"><%= teacher.first_name %> <%= teacher.last_name %></div>
+            <div class="text-muted" style="font-size:0.85rem;"><%= teacher.staff_id || '' %></div>
+          </div>
+        </div>
+        <% } %>
+
         <div class="card" style="max-width:560px;">
           <h1 style="font-size:1.25rem;font-weight:600;margin-bottom:4px;"><%= teacher.first_name %> <%= teacher.last_name %></h1>
           <p class="text-muted mb-4"><%= teacher.staff_id %></p>

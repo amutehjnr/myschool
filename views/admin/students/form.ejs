@@ -21,7 +21,7 @@
       <div class="page-content">
         <% if (typeof error !== 'undefined' && error) { %><div class="alert alert-danger"><%= error %></div><% } %>
         <div class="card" style="max-width:720px;">
-          <form method="POST" action="<%= mode === 'create' ? '/admin/students' : '/admin/students/' + student.id %>" novalidate>
+          <form method="POST" enctype="multipart/form-data" action="<%= mode === 'create' ? '/admin/students' : '/admin/students/' + student.id %>" novalidate>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <div class="flex gap-4" style="flex-wrap:wrap;">
               <div class="form-group" style="flex:1;min-width:200px;">
@@ -122,7 +122,20 @@
             </div>
             <% } %>
             <div class="flex gap-2">
-              <button type="submit" class="btn btn-primary"><%= mode === 'create' ? 'Create student' : 'Save changes' %></button>
+              
+            <div class="form-group">
+              <label class="form-label" for="passport">Passport photograph</label>
+              <% if (typeof student !== 'undefined' && student && student.photo_path) { %>
+                <div class="mb-2"><img src="<%= student.photo_path %>" alt="Passport" style="width:96px;height:96px;object-fit:cover;border-radius:8px;border:1px solid var(--color-border);"></div>
+              <% } %>
+              <% if (typeof teacher !== 'undefined' && teacher && teacher.photo_path) { %>
+                <div class="mb-2"><img src="<%= teacher.photo_path %>" alt="Passport" style="width:96px;height:96px;object-fit:cover;border-radius:8px;border:1px solid var(--color-border);"></div>
+              <% } %>
+              <input type="file" id="passport" name="passport" class="form-control" accept="image/jpeg,image/png,image/webp">
+              <p class="text-muted" style="font-size:0.8rem;margin-top:4px;">JPEG, PNG or WebP. Stored securely on Cloudinary.</p>
+            </div>
+
+            <button type="submit" class="btn btn-primary"><%= mode === 'create' ? 'Create student' : 'Save changes' %></button>
               <a href="/admin/students" class="btn btn-outline">Cancel</a>
             </div>
           </form>

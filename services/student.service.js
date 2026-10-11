@@ -86,6 +86,8 @@ async function createStudent(data, adminUserId, meta = {}) {
     middleName: middleName || null,
     dateOfBirth: dateOfBirth || null,
     gender: gender || null,
+    photoPath: data.photoPath || null,
+    photoPublicId: data.photoPublicId || null,
     classId: classId || null,
     houseId: houseId || null,
     academicSessionId: sessionId,

@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const { admissionLimiter, uploadLimiter } = require('../middleware/rateLimiter');
-const { admissionUpload } = require('../middleware/upload');
+const { admissionUpload, uploadToCloudinary } = require('../middleware/upload');
 const admissionController = require('../controllers/admission.controller');
 const { startApplicationRules } = require('../validators/admission.validator');
 
@@ -16,6 +16,7 @@ router.post(
   '/application/:id/documents',
   uploadLimiter,
   admissionUpload.single('document'),
+  uploadToCloudinary('admissions'),
   admissionController.uploadDocument
 );
 

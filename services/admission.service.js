@@ -4,7 +4,10 @@ const path = require('path');
 const admissionRepo = require('../repositories/admission.repository');
 const auditRepo = require('../repositories/audit.repository');
 const { query } = require('../config/database');
-const { ADMISSION_DIR } = require('../middleware/upload');
+
+// Cloudinary URLs stored in storage_path; ADMISSION_DIR kept for legacy local files
+let ADMISSION_DIR;
+try { ADMISSION_DIR = require('../middleware/upload').ADMISSION_DIR; } catch { ADMISSION_DIR = null; }
 
 const VALID_TRANSITIONS = {
   draft: ['submitted'],
@@ -69,13 +72,18 @@ async function addDocument(admissionId, file, documentType, meta = {}) {
   }
   if (!file) return { error: 'No file uploaded.' };
 
-  const storagePath = path.join('admissions', file.filename);
+  // Prefer Cloudinary URL from upload middleware
+  const cloudUrl = file.cloudinaryUrl || (file.cloudinary && file.cloudinary.url);
+  const publicId = file.cloudinaryPublicId || (file.cloudinary && file.cloudinary.publicId);
+  const storagePath = cloudUrl || path.join('admissions', file.filename || 'unknown');
+  const storedFilename = publicId || file.filename || 'cloudinary';
+
 
   await admissionRepo.addDocument({
     admissionId,
     documentType: documentType || 'supporting',
     originalFilename: file.originalname,
-    storedFilename: file.filename,
+    storedFilename: storedFilename,
     mimeType: file.mimetype,
     fileSize: file.size,
     storagePath
@@ -145,8 +153,11 @@ async function listClasses() {
   return query(`SELECT id, name, level FROM classes WHERE is_active = 1 ORDER BY name`);
 }
 
-function documentAbsolutePath(storedFilename) {
-  return path.join(ADMISSION_DIR, storedFilename);
+function documentAbsolutePath(storedFilename, storagePath) {
+  if (storagePath && String(storagePath).startsWith('http')) return storagePath;
+  if (storedFilename && String(storedFilename).startsWith('http')) return storedFilename;
+  if (ADMISSION_DIR) return path.join(ADMISSION_DIR, storedFilename);
+  return storedFilename;
 }
 
 module.exports = {

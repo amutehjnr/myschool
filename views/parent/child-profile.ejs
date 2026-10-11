@@ -19,6 +19,12 @@
         <a href="/parent/children" class="btn btn-outline btn-sm">All children</a>
       </header>
       <div class="page-content">
+        <% if (typeof selectedChild !== 'undefined' && selectedChild) { %>
+        <div class="flex items-center gap-4 mb-4">
+          <%- include('../partials/passport', { photo: selectedChild.photo_path, name: selectedChild.first_name + ' ' + selectedChild.last_name, size: 80 }) %>
+        </div>
+        <% } %>
+
         <%- include('../partials/child-selector') %>
         <% if (selectedChild) { %>
           <div class="card" style="max-width:520px;">

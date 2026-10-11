@@ -274,7 +274,10 @@ async function adminDownloadDoc(req, res, next) {
     if (!doc || Number(doc.admission_id) !== Number(req.params.id)) {
       return res.status(404).send('Document not found');
     }
-    const abs = admissionService.documentAbsolutePath(doc.stored_filename);
+    const abs = admissionService.documentAbsolutePath(doc.stored_filename, doc.storage_path);
+    if (abs && String(abs).startsWith('http')) {
+      return res.redirect(abs);
+    }
     if (!fs.existsSync(abs)) {
       return res.status(404).send('File not found on server');
     }

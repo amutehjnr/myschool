@@ -18,6 +18,17 @@
         </div>
       </header>
       <div class="page-content">
+        <% var _stu = typeof student !== 'undefined' ? student : (typeof selectedChild !== 'undefined' ? selectedChild : null); %>
+        <% if (_stu) { %>
+        <div class="card mb-4 flex items-center gap-4" style="padding:1rem;">
+          <%- include('../partials/passport', { photo: _stu.photo_path, name: (_stu.first_name||'') + ' ' + (_stu.last_name||''), size: 72 }) %>
+          <div>
+            <div style="font-weight:600;"><%= _stu.first_name %> <%= _stu.last_name %></div>
+            <div class="text-muted" style="font-size:0.85rem;">Report card · <%= _stu.student_id || '' %></div>
+          </div>
+        </div>
+        <% } %>
+
         <%- include('../partials/child-selector') %>
         <div class="card">
           <% if (selectedChild) { %>

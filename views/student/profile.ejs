@@ -19,6 +19,10 @@
         <a href="/auth/change-password" class="btn btn-outline btn-sm">Change password</a>
       </header>
       <div class="page-content">
+        <div class="flex gap-4 items-center mb-4">
+          <%- include('../partials/passport', { photo: student.photo_path, name: student.first_name + ' ' + student.last_name, size: 96 }) %>
+        </div>
+
         <div class="card" style="max-width:520px;">
           <h1 style="font-size:1.25rem;font-weight:600;"><%= student.first_name %> <%= student.last_name %></h1>
           <p class="text-muted mb-4"><%= student.student_id %></p>

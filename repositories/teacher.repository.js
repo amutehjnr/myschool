@@ -132,16 +132,18 @@ async function create({
   departmentId = null,
   qualification = null,
   phone = null,
+  photoPath = null,
+  photoPublicId = null,
   employmentDate = null,
   employmentType = null
 }) {
   const result = await query(
     `INSERT INTO teachers
        (user_id, staff_id, first_name, last_name, middle_name, department_id,
-        qualification, phone, employment_date, employment_type, is_active)
+        qualification, phone, photo_path, photo_public_id, employment_date, employment_type, is_active)
      VALUES
        (:userId, :staffId, :firstName, :lastName, :middleName, :departmentId,
-        :qualification, :phone, :employmentDate, :employmentType, 1)`,
+        :qualification, :phone, :photoPath, :photoPublicId, :employmentDate, :employmentType, 1)`,
     {
       userId,
       staffId,
@@ -171,7 +173,8 @@ async function update(id, data) {
     employment_date: 'employmentDate',
     employment_type: 'employmentType',
     staff_id: 'staffId',
-    photo_path: 'photoPath'
+    photo_path: 'photoPath',
+    photo_public_id: 'photoPublicId'
   };
 
   for (const [col, key] of Object.entries(map)) {

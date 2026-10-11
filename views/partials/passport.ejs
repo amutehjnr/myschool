@@ -1,0 +1,15 @@
+<%
+  var _photo = typeof photo !== 'undefined' ? photo : null;
+  var _name = typeof name !== 'undefined' ? name : '';
+  var _size = typeof size !== 'undefined' ? size : 72;
+  var _initials = _name ? _name.split(/\s+/).map(function(p){return p[0]||'';}).join('').slice(0,2).toUpperCase() : '?';
+%>
+<% if (_photo) { %>
+  <img src="<%= _photo %>" alt="<%= _name %>" class="passport-photo"
+       style="width:<%= _size %>px;height:<%= _size %>px;object-fit:cover;border-radius:8px;border:2px solid var(--color-border, #e2e8f0);">
+<% } else { %>
+  <div class="passport-placeholder"
+       style="width:<%= _size %>px;height:<%= _size %>px;border-radius:8px;background:var(--color-primary,#0f4c81);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:<%= Math.round(_size/3) %>px;">
+    <%= _initials %>
+  </div>
+<% } %>
