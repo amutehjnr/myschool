@@ -3,59 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Results | PSHA</title>
+  <title>Report Card | PSHA</title>
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/report-card.css">
 </head>
 <body>
   <div class="dashboard-layout">
     <%- include('../partials/student-sidebar') %>
     <div class="main-content">
-      <header class="top-navbar">
+      <header class="top-navbar no-print">
         <div class="flex items-center gap-4">
           <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
           <div>
-            <div style="font-weight:600;">My Results</div>
-            <div class="text-muted" style="font-size:0.75rem;"><%= student.first_name %> <%= student.last_name %> · <%= student.class_name || '' %></div>
+            <div style="font-weight:600;">Report Card</div>
+            <div class="text-muted" style="font-size:0.75rem;"><%= student.first_name %> <%= student.last_name %></div>
           </div>
         </div>
       </header>
       <div class="page-content">
-        <% var _stu = typeof student !== 'undefined' ? student : (typeof selectedChild !== 'undefined' ? selectedChild : null); %>
-        <% if (_stu) { %>
-        <div class="card mb-4 flex items-center gap-4" style="padding:1rem;">
-          <%- include('../partials/passport', { photo: _stu.photo_path, name: (_stu.first_name||'') + ' ' + (_stu.last_name||''), size: 72 }) %>
-          <div>
-            <div style="font-weight:600;"><%= _stu.first_name %> <%= _stu.last_name %></div>
-            <div class="text-muted" style="font-size:0.85rem;">Report card · <%= _stu.student_id || '' %></div>
-          </div>
+        <div class="rc-actions no-print">
+          <button type="button" class="btn btn-primary" onclick="window.print()">Print report card</button>
         </div>
-        <% } %>
-
-        <div class="card">
-          <% if (!results.length) { %>
-            <p class="text-muted">No published results yet.</p>
-          <% } else { %>
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr><th>Subject</th><th>Term</th><th>Score</th><th>Grade</th><th>Comment</th></tr>
-                </thead>
-                <tbody>
-                  <% results.forEach(function(r) { %>
-                    <tr>
-                      <td><%= r.subject_name %></td>
-                      <td><%= r.term_name %></td>
-                      <td><%= r.total_score != null ? r.total_score : '—' %></td>
-                      <td><strong><%= r.grade || '—' %></strong></td>
-                      <td class="text-muted"><%= r.teacher_comment || '—' %></td>
-                    </tr>
-                  <% }) %>
-                </tbody>
-              </table>
-            </div>
-          <% } %>
-        </div>
+        <%- include('../partials/report-card', { student: student, results: results }) %>
       </div>
     </div>
   </div>

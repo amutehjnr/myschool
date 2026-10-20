@@ -1,0 +1,179 @@
+<%
+  var schoolName = typeof schoolName !== 'undefined' && schoolName ? schoolName : 'Precious Star Heritage Academy';
+  var motto = typeof motto !== 'undefined' && motto ? motto : 'Nurturing Excellence · Building Character';
+  var rows = Array.isArray(results) ? results : [];
+
+  var groups = {};
+  rows.forEach(function (r) {
+    var key = String(r.term_id || r.term_name || 'default');
+    if (!groups[key]) {
+      groups[key] = {
+        term_name: r.term_name || 'Term',
+        session_name: r.session_name || '',
+        class_name: r.class_name || student.class_name || '',
+        items: []
+      };
+    }
+    groups[key].items.push(r);
+  });
+
+  function compScore(r, name) {
+    if (!r.components || !r.components.length) return null;
+    var c = r.components.find(function (x) {
+      return String(x.component_name || x.name || '').toLowerCase() === name.toLowerCase();
+    });
+    return c && c.score != null ? Number(c.score) : null;
+  }
+
+  function fmt(n) {
+    if (n == null || isNaN(n)) return '—';
+    return Number(n).toFixed(Number(n) % 1 === 0 ? 0 : 1);
+  }
+%>
+
+<% if (!rows.length) { %>
+  <div class="card"><p class="text-muted">No published results available for a report card yet.</p></div>
+<% } else { %>
+  <% Object.keys(groups).forEach(function (key) {
+    var g = groups[key];
+    var items = g.items;
+    var totalSum = 0, count = 0, passed = 0;
+    items.forEach(function (r) {
+      if (r.total_score != null) {
+        totalSum += Number(r.total_score);
+        count += 1;
+        if (Number(r.total_score) >= 40) passed += 1;
+      }
+    });
+    var average = count ? (totalSum / count) : null;
+    var teacherNotes = items.map(function (r) { return r.teacher_comment; }).filter(Boolean);
+    var principalNotes = items.map(function (r) { return r.principal_comment; }).filter(Boolean);
+    var teacherComment = teacherNotes.length ? teacherNotes[0] : 'A promising learner. Continued effort will yield greater success.';
+    var principalComment = principalNotes.length ? principalNotes[0] : 'Result reviewed. Keep working hard.';
+  %>
+  <div class="report-card">
+    <div class="rc-header">
+      <div class="school-name"><%= schoolName %></div>
+      <div class="motto"><%= motto %></div>
+      <div class="doc-title">Term Report Card</div>
+    </div>
+
+    <div class="rc-body">
+      <div class="rc-student-row">
+        <%- include('./passport', {
+          photo: student.photo_path,
+          name: (student.first_name || '') + ' ' + (student.last_name || ''),
+          size: 96
+        }) %>
+        <div class="rc-meta">
+          <div>
+            <span class="label">Student name</span>
+            <span class="value"><%= student.first_name %> <%= student.middle_name || '' %> <%= student.last_name %></span>
+          </div>
+          <div>
+            <span class="label">Student ID</span>
+            <span class="value"><%= student.student_id || '—' %></span>
+          </div>
+          <div>
+            <span class="label">Class</span>
+            <span class="value"><%= g.class_name || student.class_name || '—' %></span>
+          </div>
+          <div>
+            <span class="label">Gender</span>
+            <span class="value"><%= student.gender || '—' %></span>
+          </div>
+          <div>
+            <span class="label">Academic session</span>
+            <span class="value"><%= g.session_name || '—' %></span>
+          </div>
+          <div>
+            <span class="label">Term</span>
+            <span class="value"><%= g.term_name || '—' %></span>
+          </div>
+        </div>
+      </div>
+
+      <table class="rc-table">
+        <thead>
+          <tr>
+            <th class="subject">Subject</th>
+            <th>CA (30)</th>
+            <th>Test (20)</th>
+            <th>Exam (50)</th>
+            <th>Total (100)</th>
+            <th>Grade</th>
+            <th>Remark</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% items.forEach(function (r) {
+            var ca = compScore(r, 'CA');
+            var test = compScore(r, 'Test');
+            var exam = compScore(r, 'Exam');
+            var remark = r.teacher_comment || '';
+            if (!remark) {
+              var sc = Number(r.total_score);
+              if (sc >= 70) remark = 'Excellent';
+              else if (sc >= 60) remark = 'Very Good';
+              else if (sc >= 50) remark = 'Good';
+              else if (sc >= 40) remark = 'Fair';
+              else if (r.total_score != null) remark = 'Weak';
+              else remark = '—';
+            }
+          %>
+            <tr>
+              <td class="subject"><%= r.subject_name || '—' %></td>
+              <td><%= fmt(ca) %></td>
+              <td><%= fmt(test) %></td>
+              <td><%= fmt(exam) %></td>
+              <td><strong><%= fmt(r.total_score) %></strong></td>
+              <td class="grade-cell"><%= r.grade || '—' %></td>
+              <td style="text-align:left;font-size:0.8rem;"><%= remark.length > 40 ? remark.slice(0, 40) + '…' : remark %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+
+      <div class="rc-summary">
+        <div class="box">
+          <div class="num"><%= count %></div>
+          <div class="lbl">Subjects</div>
+        </div>
+        <div class="box">
+          <div class="num"><%= average != null ? average.toFixed(1) : '—' %></div>
+          <div class="lbl">Average</div>
+        </div>
+        <div class="box">
+          <div class="num"><%= passed %>/<%= count %></div>
+          <div class="lbl">Passed (≥40)</div>
+        </div>
+        <div class="box">
+          <div class="num"><%= average != null ? (average >= 70 ? 'A' : average >= 60 ? 'B' : average >= 50 ? 'C' : average >= 40 ? 'D' : 'F') : '—' %></div>
+          <div class="lbl">Overall</div>
+        </div>
+      </div>
+
+      <div class="rc-comments">
+        <div class="block">
+          <h4>Class teacher’s comment</h4>
+          <p><%= teacherComment %></p>
+        </div>
+        <div class="block">
+          <h4>Principal’s comment</h4>
+          <p><%= principalComment %></p>
+        </div>
+      </div>
+
+      <div class="rc-signatures">
+        <div class="sig"><div class="line"></div>Class teacher</div>
+        <div class="sig"><div class="line"></div>Principal</div>
+        <div class="sig"><div class="line"></div>Parent / Guardian</div>
+      </div>
+    </div>
+
+    <div class="rc-footer">
+      Generated by <%= schoolName %> portal · This is a computer-generated report card
+    </div>
+  </div>
+  <% }) %>
+<% } %>

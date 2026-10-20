@@ -1,0 +1,248 @@
+/* Formal school report card */
+.report-card {
+  max-width: 900px;
+  margin: 0 auto 2rem;
+  background: #fff;
+  border: 2px solid #0a2f4d;
+  box-shadow: 0 4px 24px rgba(10, 47, 77, 0.08);
+  color: #1a1a1a;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.rc-header {
+  background: linear-gradient(135deg, #0a2f4d 0%, #0f4c81 100%);
+  color: #fff;
+  padding: 1.25rem 1.5rem;
+  text-align: center;
+  position: relative;
+}
+
+.rc-header .school-name {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0 0 0.25rem;
+}
+
+.rc-header .motto {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  font-style: italic;
+  margin: 0 0 0.5rem;
+}
+
+.rc-header .doc-title {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.35rem 1.25rem;
+  background: #c9a227;
+  color: #0a2f4d;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rc-body {
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.rc-student-row {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  border-bottom: 2px solid #0a2f4d;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.rc-meta {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem 1.5rem;
+  font-size: 0.9rem;
+}
+
+.rc-meta .label {
+  color: #64748b;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: block;
+}
+
+.rc-meta .value {
+  font-weight: 600;
+  color: #0a2f4d;
+}
+
+.rc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.rc-table th {
+  background: #0a2f4d;
+  color: #fff;
+  padding: 0.55rem 0.5rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.rc-table th.subject {
+  text-align: left;
+}
+
+.rc-table td {
+  padding: 0.5rem;
+  border: 1px solid #dbe3ec;
+  text-align: center;
+}
+
+.rc-table td.subject {
+  text-align: left;
+  font-weight: 600;
+  color: #0a2f4d;
+}
+
+.rc-table tbody tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+.rc-table .grade-cell {
+  font-weight: 800;
+  color: #0a2f4d;
+}
+
+.rc-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.rc-summary .box {
+  border: 1px solid #dbe3ec;
+  border-radius: 6px;
+  padding: 0.75rem;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.rc-summary .box .num {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0a2f4d;
+}
+
+.rc-summary .box .lbl {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+}
+
+.rc-comments {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.rc-comments .block {
+  border: 1px solid #dbe3ec;
+  border-radius: 6px;
+  padding: 0.85rem;
+  min-height: 80px;
+}
+
+.rc-comments .block h4 {
+  margin: 0 0 0.4rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #0a2f4d;
+}
+
+.rc-comments .block p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #334155;
+  line-height: 1.45;
+}
+
+.rc-signatures {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px dashed #cbd5e1;
+}
+
+.rc-signatures .sig {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.rc-signatures .sig .line {
+  border-top: 1px solid #0a2f4d;
+  margin: 2.5rem 0.5rem 0.35rem;
+}
+
+.rc-footer {
+  text-align: center;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  padding: 0.75rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.rc-actions {
+  max-width: 900px;
+  margin: 0 auto 1rem;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+@media print {
+  .dashboard-layout .sidebar,
+  .top-navbar,
+  .rc-actions,
+  .no-print {
+    display: none !important;
+  }
+  .main-content {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .report-card {
+    box-shadow: none;
+    border-width: 1px;
+  }
+  body {
+    background: #fff !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .rc-meta,
+  .rc-comments,
+  .rc-signatures {
+    grid-template-columns: 1fr;
+  }
+  .rc-student-row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
