@@ -1,8 +1,10 @@
 <%
+  /* Expects: student, results (array with components), optional schoolName */
   var schoolName = typeof schoolName !== 'undefined' && schoolName ? schoolName : 'Precious Star Heritage Academy';
   var motto = typeof motto !== 'undefined' && motto ? motto : 'Nurturing Excellence · Building Character';
   var rows = Array.isArray(results) ? results : [];
 
+  // Group by term_id
   var groups = {};
   rows.forEach(function (r) {
     var key = String(r.term_id || r.term_name || 'default');
@@ -37,7 +39,9 @@
   <% Object.keys(groups).forEach(function (key) {
     var g = groups[key];
     var items = g.items;
-    var totalSum = 0, count = 0, passed = 0;
+    var totalSum = 0;
+    var count = 0;
+    var passed = 0;
     items.forEach(function (r) {
       if (r.total_score != null) {
         totalSum += Number(r.total_score);
@@ -165,9 +169,18 @@
       </div>
 
       <div class="rc-signatures">
-        <div class="sig"><div class="line"></div>Class teacher</div>
-        <div class="sig"><div class="line"></div>Principal</div>
-        <div class="sig"><div class="line"></div>Parent / Guardian</div>
+        <div class="sig">
+          <div class="line"></div>
+          Class teacher
+        </div>
+        <div class="sig">
+          <div class="line"></div>
+          Principal
+        </div>
+        <div class="sig">
+          <div class="line"></div>
+          Parent / Guardian
+        </div>
       </div>
     </div>
 

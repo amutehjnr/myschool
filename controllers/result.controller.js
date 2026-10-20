@@ -206,6 +206,7 @@ async function studentReportCard(req, res, next) {
       });
     }
     const report = await resultService.getStudentReportCard(student.id, {
+      sessionId: req.query.session_id || null,
       termId: req.query.term_id || null,
       viewerUserId: req.session.userId,
       viewerRole: req.session.role
@@ -239,6 +240,7 @@ async function parentReportCard(req, res, next) {
       });
     }
     const report = await resultService.getStudentReportCard(data.selectedChild.id, {
+      sessionId: req.query.session_id || null,
       termId: req.query.term_id || null,
       viewerUserId: req.session.userId,
       viewerRole: req.session.role

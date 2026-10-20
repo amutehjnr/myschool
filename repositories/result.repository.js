@@ -276,9 +276,13 @@ async function bulkSetStatus(ids, status, approvedBy = null) {
   );
 }
 
-async function getStudentResults(studentId, { termId = null, publishedOnly = true } = {}) {
+async function getStudentResults(studentId, { termId = null, sessionId = null, publishedOnly = true } = {}) {
   let where = 'r.student_id = :studentId';
   const params = { studentId };
+  if (sessionId) {
+    where += ' AND r.academic_session_id = :sessionId';
+    params.sessionId = sessionId;
+  }
   if (termId) {
     where += ' AND r.term_id = :termId';
     params.termId = termId;
@@ -288,13 +292,42 @@ async function getStudentResults(studentId, { termId = null, publishedOnly = tru
   }
   return query(
     `SELECT r.id, r.total_score, r.grade, r.teacher_comment, r.principal_comment, r.status,
-            sub.name AS subject_name, t.name AS term_name, c.name AS class_name
+            r.term_id, r.academic_session_id, r.published_at,
+            sub.name AS subject_name, t.name AS term_name, c.name AS class_name,
+            s.name AS session_name
      FROM results r
      LEFT JOIN subjects sub ON sub.id = r.subject_id
      JOIN terms t ON t.id = r.term_id
      JOIN classes c ON c.id = r.class_id
+     LEFT JOIN academic_sessions s ON s.id = r.academic_session_id
      WHERE ${where}
-     ORDER BY sub.name`,
+     ORDER BY s.name DESC, t.name, sub.name`,
+    params
+  );
+}
+
+async function listSessions() {
+  return query(
+    `SELECT id, name, is_current, start_date, end_date
+     FROM academic_sessions
+     ORDER BY start_date DESC, id DESC`
+  );
+}
+
+async function listTerms(sessionId = null) {
+  let where = '1=1';
+  const params = {};
+  if (sessionId) {
+    where = 't.academic_session_id = :sessionId';
+    params.sessionId = sessionId;
+  }
+  return query(
+    `SELECT t.id, t.name, t.is_current, t.academic_session_id, s.name AS session_name,
+            t.start_date, t.end_date
+     FROM terms t
+     JOIN academic_sessions s ON s.id = t.academic_session_id
+     WHERE ${where}
+     ORDER BY t.start_date ASC, t.id ASC`,
     params
   );
 }
@@ -324,5 +357,7 @@ module.exports = {
   setStatus,
   bulkSetStatus,
   getStudentResults,
-  getCurrentTerm
+  getCurrentTerm,
+  listSessions,
+  listTerms
 };

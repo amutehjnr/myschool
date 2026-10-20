@@ -17,11 +17,23 @@
           <button class="mobile-menu-btn" data-sidebar-toggle>☰</button>
           <div>
             <div style="font-weight:600;">Report Card</div>
-            <div class="text-muted" style="font-size:0.75rem;"><%= student.first_name %> <%= student.last_name %></div>
+            <div class="text-muted" style="font-size:0.75rem;">
+              <%= student.first_name %> <%= student.last_name %>
+              <% if (typeof selectedTerm !== 'undefined' && selectedTerm) { %>
+                · <%= selectedTerm.name %><% if (selectedSession) { %> (<%= selectedSession.name %>)<% } %>
+              <% } else if (typeof selectedSession !== 'undefined' && selectedSession) { %>
+                · <%= selectedSession.name %>
+              <% } %>
+            </div>
           </div>
         </div>
       </header>
       <div class="page-content">
+        <%- include('../partials/report-filters', {
+          sessions: typeof sessions !== 'undefined' ? sessions : [],
+          terms: typeof terms !== 'undefined' ? terms : [],
+          filters: typeof filters !== 'undefined' ? filters : {}
+        }) %>
         <div class="rc-actions no-print">
           <button type="button" class="btn btn-primary" onclick="window.print()">Print report card</button>
         </div>

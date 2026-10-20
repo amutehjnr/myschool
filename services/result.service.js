@@ -219,7 +219,7 @@ async function publishResults(ids, adminUserId, meta = {}) {
   return { success: true };
 }
 
-async function getStudentReportCard(studentId, { termId = null, viewerUserId, viewerRole } = {}) {
+async function getStudentReportCard(studentId, { termId = null, sessionId = null, viewerUserId, viewerRole } = {}) {
   // Object-level: student self, parent of child, or admin/teacher
   const role = String(viewerRole || '').toLowerCase();
   if (role === 'student') {
@@ -238,17 +238,54 @@ async function getStudentReportCard(studentId, { termId = null, viewerUserId, vi
   if (!student) return { error: 'Student not found.' };
 
   const publishedOnly = role === 'student' || role === 'parent';
-  const results = await resultRepo.getStudentResults(studentId, {
-    termId,
-    publishedOnly
-  });
+
+  // Default filters: current session + current term when none selected
+  let effectiveSessionId = sessionId ? Number(sessionId) : null;
+  let effectiveTermId = termId ? Number(termId) : null;
+
+  const currentTerm = await resultRepo.getCurrentTerm();
+  // No filters at all → current session + current term (one report card)
+  if (!sessionId && !termId && currentTerm) {
+    effectiveSessionId = currentTerm.session_id || currentTerm.academic_session_id || null;
+    effectiveTermId = currentTerm.id;
+  } else if (sessionId && !termId) {
+    // Session only → all terms in that session (up to 3 report cards)
+    effectiveSessionId = Number(sessionId);
+    effectiveTermId = null;
+  } else if (!sessionId && termId) {
+    effectiveTermId = Number(termId);
+  }
+
+  const [sessions, terms, results] = await Promise.all([
+    resultRepo.listSessions(),
+    resultRepo.listTerms(effectiveSessionId || null),
+    resultRepo.getStudentResults(studentId, {
+      termId: effectiveTermId,
+      sessionId: effectiveSessionId,
+      publishedOnly
+    })
+  ]);
 
   // Attach components
   for (const r of results) {
     r.components = await resultRepo.getComponents(r.id);
   }
 
-  return { student, results };
+  const selectedSession = sessions.find((s) => Number(s.id) === Number(effectiveSessionId)) || null;
+  const selectedTerm = terms.find((t) => Number(t.id) === Number(effectiveTermId)) || null;
+
+  return {
+    student,
+    results,
+    sessions,
+    terms,
+    filters: {
+      sessionId: effectiveSessionId,
+      termId: effectiveTermId
+    },
+    selectedSession,
+    selectedTerm
+  };
 }
 
 async function getTeacherOptions(userId) {

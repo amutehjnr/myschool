@@ -1,0 +1,38 @@
+<%
+  var sessionsList = typeof sessions !== 'undefined' && sessions ? sessions : [];
+  var termsList = typeof terms !== 'undefined' && terms ? terms : [];
+  var fSession = (typeof filters !== 'undefined' && filters && filters.sessionId) ? String(filters.sessionId) : '';
+  var fTerm = (typeof filters !== 'undefined' && filters && filters.termId) ? String(filters.termId) : '';
+  var extraQuery = typeof extraQuery !== 'undefined' ? extraQuery : '';
+%>
+<form method="GET" class="card no-print" style="padding:1rem 1.25rem;margin-bottom:1.25rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-end;">
+  <% if (extraQuery) { %>
+    <%- extraQuery %>
+  <% } %>
+  <div class="form-group" style="margin:0;min-width:180px;flex:1;">
+    <label class="form-label" for="session_id">Academic session</label>
+    <select name="session_id" id="session_id" class="form-control" onchange="this.form.querySelector('#term_id').value=''; this.form.submit();">
+      <option value="">— All sessions —</option>
+      <% sessionsList.forEach(function(s) { %>
+        <option value="<%= s.id %>" <%= fSession === String(s.id) ? 'selected' : '' %>>
+          <%= s.name %><%= s.is_current ? ' (current)' : '' %>
+        </option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="form-group" style="margin:0;min-width:160px;flex:1;">
+    <label class="form-label" for="term_id">Term</label>
+    <select name="term_id" id="term_id" class="form-control">
+      <option value="">— All terms in session —</option>
+      <% termsList.forEach(function(t) { %>
+        <option value="<%= t.id %>" <%= fTerm === String(t.id) ? 'selected' : '' %>>
+          <%= t.name %><%= t.session_name ? ' · ' + t.session_name : '' %><%= t.is_current ? ' (current)' : '' %>
+        </option>
+      <% }) %>
+    </select>
+  </div>
+  <div style="display:flex;gap:0.5rem;">
+    <button type="submit" class="btn btn-primary">View report</button>
+    <a href="?" class="btn btn-secondary">Reset</a>
+  </div>
+</form>
