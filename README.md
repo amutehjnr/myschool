@@ -183,6 +183,10 @@ UNLICENSED — proprietary for Precious Star Heritage Academy / project stakehol
 
 ---
 
+## Deploy on any platform
+
+See **[DEPLOY.md](./DEPLOY.md)** for Docker, Railway, Render, VPS, Vercel, and environment variables.
+
 ## Support
 
 For deployment issues, verify:

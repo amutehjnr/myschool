@@ -13,7 +13,7 @@ const logger = require('./utils/logger');
 const { createSessionMiddleware } = require('./config/session');
 const { createHelmetMiddleware } = require('./config/security');
 const { generalLimiter } = require('./middleware/rateLimiter');
-const { csrfProtection, exposeCsrfToken } = require('./middleware/csrf');
+const { csrfProtection, csrfUnlessMultipart, exposeCsrfToken } = require('./middleware/csrf');
 const { loadUser } = require('./middleware/auth');
 const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
 
@@ -109,7 +109,7 @@ const attendanceApiRoutes = require('./routes/attendance.api.routes');
 app.use('/api/attendance', attendanceApiRoutes);
 
 // CSRF for all subsequent routes that mutate state
-app.use(csrfProtection);
+app.use(csrfUnlessMultipart);
 app.use(exposeCsrfToken);
 
 // Routes (will be expanded in later phases)
@@ -124,6 +124,9 @@ const { requireAuth } = require('./middleware/auth');
 const commsController = require('./controllers/comms.controller');
 
 app.use('/', publicRoutes);
+// Convenience aliases (bookmarks / old links)
+app.get('/login', (req, res) => res.redirect(301, '/auth/login'));
+app.get('/register', (req, res) => res.redirect(301, '/auth/register'));
 app.use('/auth', authRoutes);
 app.use('/admin', adminRoutes);
 app.use('/teacher', teacherRoutes);

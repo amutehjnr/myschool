@@ -19,7 +19,7 @@ function createSessionMiddleware() {
     cookie: {
       httpOnly: true,
       secure: isProduction || process.env.COOKIE_SECURE === 'true',
-      sameSite: process.env.COOKIE_SAME_SITE || (isProduction ? 'strict' : 'lax'),
+      sameSite: process.env.COOKIE_SAME_SITE || 'lax',
       maxAge: Number(process.env.SESSION_MAX_AGE_MS) || 8 * 60 * 60 * 1000, // 8 hours
       path: '/'
     }

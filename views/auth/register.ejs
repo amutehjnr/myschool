@@ -23,7 +23,7 @@
       <% } %>
 
       <h1 class="auth-title">Create an account</h1>
-      <p class="auth-subtitle">Register as a parent/guardian to access the portal.</p>
+      <p class="auth-subtitle">Register as a parent/guardian to access the portal. Staff and student accounts are created by the school.</p>
 
       <form method="POST" action="/auth/register" novalidate>
         <input type="hidden" name="_csrf" value="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>">

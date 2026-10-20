@@ -1,0 +1,16 @@
+node_modules
+npm-debug.log
+.env
+.env.*
+!.env.example
+.git
+.gitignore
+*.log
+.DS_Store
+coverage
+.nyc_output
+.tmp
+.vscode
+.idea
+psha-school-portal-*.zip
+psha-school-portal-*.tar.gz

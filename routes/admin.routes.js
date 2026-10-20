@@ -19,6 +19,7 @@ const commsController = require('../controllers/comms.controller');
 const attendanceController = require('../controllers/attendance.controller');
 const auditController = require('../controllers/audit.controller');
 const { passportUpload, uploadToCloudinary } = require('../middleware/upload');
+const { csrfProtection } = require('../middleware/csrf');
 const logger = require('../utils/logger');
 
 router.use(requireAuth, requireAdmin);
@@ -57,10 +58,10 @@ router.post('/roles/:id/permissions', roleController.updatePermissions);
 // Teachers
 router.get('/teachers', teacherController.adminList);
 router.get('/teachers/new', teacherController.adminShowCreate);
-router.post('/teachers', passportUpload.single('passport'), uploadToCloudinary('passports/teachers'), createTeacherRules, teacherController.adminCreate);
+router.post('/teachers', passportUpload.single('passport'), csrfProtection, uploadToCloudinary('passports/teachers'), createTeacherRules, teacherController.adminCreate);
 router.get('/teachers/:id', teacherController.adminShow);
 router.get('/teachers/:id/edit', teacherController.adminShowEdit);
-router.post('/teachers/:id', passportUpload.single('passport'), uploadToCloudinary('passports/teachers'), updateTeacherRules, teacherController.adminUpdate);
+router.post('/teachers/:id', passportUpload.single('passport'), csrfProtection, uploadToCloudinary('passports/teachers'), updateTeacherRules, teacherController.adminUpdate);
 router.post('/teachers/:id/activate', teacherController.adminActivate);
 router.post('/teachers/:id/deactivate', teacherController.adminDeactivate);
 
@@ -68,10 +69,10 @@ router.post('/teachers/:id/deactivate', teacherController.adminDeactivate);
 // Students
 router.get('/students', studentController.adminList);
 router.get('/students/new', studentController.adminShowCreate);
-router.post('/students', passportUpload.single('passport'), uploadToCloudinary('passports/students'), createStudentRules, studentController.adminCreate);
+router.post('/students', passportUpload.single('passport'), csrfProtection, uploadToCloudinary('passports/students'), createStudentRules, studentController.adminCreate);
 router.get('/students/:id', studentController.adminShow);
 router.get('/students/:id/edit', studentController.adminShowEdit);
-router.post('/students/:id', passportUpload.single('passport'), uploadToCloudinary('passports/students'), updateStudentRules, studentController.adminUpdate);
+router.post('/students/:id', passportUpload.single('passport'), csrfProtection, uploadToCloudinary('passports/students'), updateStudentRules, studentController.adminUpdate);
 router.post('/students/:id/archive', studentController.adminArchive);
 router.post('/students/:id/link-parent', studentController.adminLinkParent);
 router.post('/students/:id/unlink-parent', studentController.adminUnlinkParent);

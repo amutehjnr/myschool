@@ -5,9 +5,8 @@ require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') }
 const path = require('path');
 const fs = require('fs');
 const mysql = require('mysql2/promise');
-const logger = require('../utils/logger');
 
-async function run() {
+async function runSeed() {
   const connection = await mysql.createConnection({
     host: process.env.DATABASE_HOST || '127.0.0.1',
     port: Number(process.env.DATABASE_PORT) || 3306,
@@ -50,7 +49,11 @@ async function run() {
   console.log('  Parent:  parent.nwosu@example.com / Password@123');
 }
 
-run().catch((err) => {
-  console.error('Seed failed:', err.message);
-  process.exit(1);
-});
+if (require.main === module) {
+  runSeed().catch((err) => {
+    console.error('Seed failed:', err.message);
+    process.exit(1);
+  });
+}
+
+module.exports = { runSeed };

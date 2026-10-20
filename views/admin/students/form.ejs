@@ -21,7 +21,7 @@
       <div class="page-content">
         <% if (typeof error !== 'undefined' && error) { %><div class="alert alert-danger"><%= error %></div><% } %>
         <div class="card" style="max-width:720px;">
-          <form method="POST" enctype="multipart/form-data" action="<%= mode === 'create' ? '/admin/students' : '/admin/students/' + student.id %>" novalidate>
+          <form method="POST" enctype="multipart/form-data" action="<%= mode === 'create' ? '/admin/students?_csrf=' + csrfToken : '/admin/students/' + student.id + '?_csrf=' + csrfToken %>" novalidate>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <div class="flex gap-4" style="flex-wrap:wrap;">
               <div class="form-group" style="flex:1;min-width:200px;">

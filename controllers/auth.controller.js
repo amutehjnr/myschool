@@ -33,52 +33,50 @@ async function showLogin(req, res) {
 }
 
 async function postLogin(req, res) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).render('auth/login', {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render('auth/login', {
+        title: 'Sign In',
+        email: req.body.email || '',
+        error: errors.array()[0].msg
+      });
+    }
+
+    const { email, password } = req.body;
+    const result = await authService.login(email, password, getMeta(req));
+
+    if (result.error) {
+      return res.status(401).render('auth/login', {
+        title: 'Sign In',
+        email: req.body.email || '',
+        error: result.error
+      });
+    }
+
+    // Session fixation prevention
+    await new Promise((resolve, reject) => {
+      req.session.regenerate((err) => (err ? reject(err) : resolve()));
+    });
+
+    req.session.userId = result.user.id;
+    req.session.role = result.user.role_name || result.user.role;
+    req.session.email = result.user.email;
+    req.session.mustChangePassword = Boolean(result.user.mustChangePassword);
+
+    if (result.user.mustChangePassword) {
+      return res.redirect('/auth/change-password');
+    }
+
+    return res.redirect(redirectByRole(result.user.role_name || result.user.role));
+  } catch (err) {
+    console.error('Login error:', err.message);
+    return res.status(500).render('auth/login', {
       title: 'Sign In',
       email: req.body.email || '',
-      error: errors.array()[0].msg
+      error: 'Unable to sign in right now. If this persists, check that the database is running and credentials in .env are correct.'
     });
   }
-
-  const { email, password } = req.body;
-  const result = await authService.login(email, password, getMeta(req));
-
-  if (result.error) {
-    return res.status(401).render('auth/login', {
-      title: 'Sign In',
-      email: email || '',
-      error: result.error
-    });
-  }
-
-  // Session fixation protection: regenerate session after successful login
-  const user = result.user;
-  return new Promise((resolve) => {
-    req.session.regenerate((err) => {
-      if (err) {
-        req.session.flash = { type: 'error', message: 'Could not start session. Please try again.' };
-        res.redirect('/auth/login');
-        return resolve();
-      }
-
-      req.session.userId = user.id;
-      req.session.email = user.email;
-      req.session.role = user.role;
-      req.session.mustChangePassword = user.mustChangePassword;
-
-      if (user.mustChangePassword) {
-        res.redirect('/auth/change-password');
-        return resolve();
-      }
-
-      const returnTo = req.session.returnTo;
-      delete req.session.returnTo;
-      res.redirect(returnTo || redirectByRole(user.role));
-      resolve();
-    });
-  });
 }
 
 async function logout(req, res) {
